@@ -1,6 +1,6 @@
 
 
-class USER {
+export class USER {
 
 
 
@@ -8,7 +8,6 @@ class USER {
 
         this.firstName = '';
         this.lastName = '';
-        this.residenceAddress = '';
         this.email = '';
         this.pin = '';
         this.accountNumber = '';
@@ -20,6 +19,7 @@ class USER {
         this.dateOfBirth = '';
         this.nationality = '';
         this.stateOfOrigin = '';
+        this.residenceAddress = '';
         this.localGovernmentOfOrigin = '';
         this.cityTownOfOrigin = '';
         this.stateOfResidence = '';
