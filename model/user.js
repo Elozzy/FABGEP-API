@@ -11,7 +11,7 @@ export class USER {
         this.email = '';
         this.pwd = '';
         this.pin = '';
-        this.purseNumber = '';
+        this.purseNumber = 0;
         this.tel = '';
         this.gender = '';
         this.dateOfBirth = '';
