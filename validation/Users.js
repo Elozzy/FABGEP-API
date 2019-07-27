@@ -29,7 +29,7 @@ class UserValidation{
          * @return { json }
          */
         const { firstName, lastName, email, password, phone, isAdmin} = request.body;
-        if (Object.keys(request.body).length >5) {
+        if (Object.keys(request.body).length >6) {
             return response.status(400).json({
               status: 400,
               error: 'Only First Name, Last Name, Email and Password is required'
