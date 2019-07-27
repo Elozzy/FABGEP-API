@@ -18,6 +18,7 @@ const isValidName = /^[a-zA-Z]{3,15}$/;
 const isValidPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const whiteSpace =/\s/g;
 const isBoolean = /^(true|false|1|0)$/;
+const isValidPhone = /^[0-9]{8,16}$/;
 
 class UserValidation{
     static userSignup(request, response, next){
@@ -27,50 +28,50 @@ class UserValidation{
          * @param { Object } response contains response sent to the user
          * @return { json }
          */
-        const { first_name, last_name, email, password, is_admin} = request.body;
+        const { firstName, lastName, email, password, phone, isAdmin} = request.body;
         if (Object.keys(request.body).length >5) {
             return response.status(400).json({
               status: 400,
               error: 'Only First Name, Last Name, Email and Password is required'
             });
         }
-        if (isEmpty(first_name) && isEmpty(last_name) && isEmpty(email) && isEmpty(password)) {
+        if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(password) && isEmpty(phone)) {
             return response.status(400).json({
               status: 400,
-              error: 'First Name, Last Name, Email and Password field are required'
+              error: 'First Name, Last Name, Email, Password and Phone number field are required'
             });
         }
-        if(isEmpty(first_name)){
+        if(isEmpty(firstName)){
             return response.status(400).json({
                 status: 400,
                 error: 'First name is required'
             })
         }
-        if(!isValidAlphabet.test(first_name)){
+        if(!isValidAlphabet.test(firstName)){
             return response.status(422).json({
                 status: 422,
                 error: 'First name can only contain alphabets'
             })
         }
-        if(!isValidName.test(first_name)){
+        if(!isValidName.test(firstName)){
             return response.status(422).json({
                 status: 422,
                 error: 'First name should not contain spaces and be less than 3 or more than 15'
             })
         }
-        if(isEmpty(last_name)){
+        if(isEmpty(lastName)){
             return response.status(400).json({
                 status: 400,
                 error: 'Last name is required'
             })
         }
-        if(!isValidAlphabet.test(last_name)){
+        if(!isValidAlphabet.test(lastName)){
             return response.status(422).json({
                 status: 422,
                 error: 'Last name can only contain alphabets'
             })
         }
-        if(!isValidName.test(last_name)){
+        if(!isValidName.test(lastName)){
             return response.status(422).json({
                 status: 422,
                 error: 'Last name should not contain spaces be less than 3 or greater than 15'
@@ -100,10 +101,22 @@ class UserValidation{
                 error: 'Invalid email address'
             })
         }
-        if(!isBoolean.test(is_admin)){
+        if(isEmpty(phone)){
+            return response.status(400).json({
+                status: 400,
+                error: 'Phone number is required'
+            })
+        }
+        if(!isValidPhone.test(phone)){
             return response.status(422).json({
                 status: 422,
-                error: 'Invalid input, is_admin can only be true or false'
+                error: 'Invalid phone number, phone number should not be less than 8 and more than 16'
+            })
+        }
+        if(!isBoolean.test(isAdmin)){
+            return response.status(422).json({
+                status: 422,
+                error: 'Invalid input, isAdmin can only be true or false'
             })
         }
         next();
