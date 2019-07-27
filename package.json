@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": ""
+    "start": "babel-node app.js",
+    "dev": "nodemon --exec babel-node app.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "test": "nyc mocha test/*js --require @babel/register --exit --timeout 20000"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -15,6 +19,7 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.1.4",
+    "mongodb": "^3.3.0-beta2",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
