@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
 const userRoute = require('./routes/user');
 const PORT = process.env.port || 4000;
 const app = express();
@@ -9,13 +10,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(userRoute);
 
-app.use('/api/v1/', userRoute);
-
-// app.get('/', (req, res) => {
-//     res.status(200).send('server online');
-// })
-// app.post('/auth', Validate.createAccount, UserController.createAccount, (req, res)=>{ })
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
@@ -34,4 +30,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`serve running on port ${PORT}`);
 })
-export default app;
+
+module.exports = app;
