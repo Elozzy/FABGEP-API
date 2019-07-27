@@ -1,11 +1,21 @@
 const joi = require('@hapi/joi');
 
+class Validator {
 
 
-Validator = {
+    static login(data) {
+        let schema = joi.object().keys({
+            email: joi.string().email({ minDomainSegments: 2 }).required(),
+            pwd: joi.string().required(),
+        });
+        return joi.validate(data, schema);
 
-    validateStep1UserRegistration: (data) => {
-        const schema = joi.object().keys({
+    }
+
+
+
+    static stepOneUserRegistration(data) {
+        let schema = joi.object().keys({
             id: joi.string().required(),
             firstName: joi.string().required(),
             lastName: joi.string().alphanum().required(),
@@ -42,27 +52,25 @@ Validator = {
             latitude: joi.any(),
             longitude: joi.any(),
         });
-        const result = joi.validate(data, schema);
-        //  console.log(result.error);
-        if (result.error === null) {
-            return true;
-        }
-        return false;
+        return joi.validate(data, schema);
+    }
 
-    },
-    validateStep2UserRegistration: (data) => {
+
+
+    // NOT YET FULLY IMPLEMENTED AND TESTED
+    static stepTwoUserRegistration(data) {
         const schema = joi.object().keys({
             id: joi.string().required(),
-            firstName: joi.string().required(),
-            lastName: joi.string().alphanum().required(),
-            email: joi.string().email({ minDomainSegments: 2 }).required(),
-            pwd: joi.string().required(),
-            pin: joi.string().required(),
+            firstName: joi.any(),
+            lastName: joi.any(),
+            email: joi.any(),
+            pwd: joi.any(),
+            pin: joi.any(),
             purseNumber: joi.number().integer().required(),
-            tel: joi.number().integer().min(11).max(11),
-            gender: joi.string().min(4).max(6),
+            tel: joi.number().integer().required(),
+            gender: joi.string().min(4).max(6).required(),
             dateOfBirth: [joi.string(), joi.number()],
-            nationality: joi.string(),
+            nationality: joi.string().required(),
             stateOfOrigin: joi.string(),
             homeAddress: joi.string(),
             localGovernmentOfOrigin: joi.string(),
@@ -89,13 +97,44 @@ Validator = {
             longitude: joi.string(),
         });
         const result = joi.validate(data, schema);
-        console.log(result.error);
+
         if (result.error === null) {
             return true;
-        }
+        } console.log(result.error);
         return false;
 
     }
-}
 
-module.exports = Validator;
+
+    static purse(data) {
+        const schema = joi.object().keys({
+            purseNumber: joi.number().integer(),
+            balance: joi.number(),
+            bonusBalance: joi.number(),
+            purseOwner: joi.string(),
+        });
+        return joi.validate(data, schema);
+    }
+
+    static package(data) {
+        const schema = joi.object().keys({
+
+        })
+        return joi.validate(data, schema);
+    }
+    default
+    static investment(data) {
+        const schema = joi.object().keys({
+
+        })
+        return joi.validate(data, schema);
+    }
+
+    static card(data) {
+        const schema = joi.object().keys({
+
+        })
+        return joi.validate(data, schema);
+    }
+}
+export default Validator;
