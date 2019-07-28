@@ -70,25 +70,21 @@ function () {
     value: function () {
       var _findOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee2(collection, query) {
-        var c, result;
+      _regenerator["default"].mark(function _callee2(collection, query, callBack) {
+        var c;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return MDBConnect.connect(db, collection);
+                return MDBConnect.connect(collection);
 
               case 2:
                 c = _context2.sent;
                 _context2.next = 5;
-                return c.findOne(query);
+                return c.findOne(query, callBack);
 
               case 5:
-                result = _context2.sent;
-                return _context2.abrupt("return", result);
-
-              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -96,7 +92,7 @@ function () {
         }, _callee2);
       }));
 
-      function findOne(_x2, _x3) {
+      function findOne(_x2, _x3, _x4) {
         return _findOne.apply(this, arguments);
       }
 
@@ -133,7 +129,7 @@ function () {
         }, _callee3);
       }));
 
-      function insert(_x4, _x5) {
+      function insert(_x5, _x6) {
         return _insert.apply(this, arguments);
       }
 

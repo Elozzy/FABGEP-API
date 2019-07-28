@@ -1,25 +1,42 @@
 import jwt from 'jsonwebtoken';
 import MDBConnect from '../database/Mongodb';
+import { CookieAccessInfo } from 'cookiejar';
 
 class Users {
 
     static async userSignup(request, response) {
         try {
             const userData = { ...request.body };
-            const result = await MDBConnect.insert('users', userData);
-            const data = { ...result.ops[0] };
-            const token = jwt.sign(data, 'foodmoni');
-            return response.status(200).json({
-                status: true, data: '',
-                data: { token, data },
-                message: 'success'
-            })
+
+            // check if email is already in use by someone else
+            MDBConnect.findOne('users', { email: userData.email }, (err, data) => {
+                if (err) {
+                    response.status(400).json({
+                        'status': false, 'message': `error ocurred`, data: ''
+                    });
+                }
+
+                if (data) {
+                    console.log(data);
+                    response.status(400).json({
+                        'status': false, 'message': `email already in use`, data: ''
+                    });
+                }
+
+                // get a new account number to be tied to the account
+                MDBConnect.findOne('index_account_number', { availability: true, owner: null }, (err, accontNumber) => {
+                    console.log(accontNumber);
+
+                })
+            });
+
+
 
         } catch (error) {
             return response.status(500).json({
-                status: true, data: '',
-                message: 'Service not available',
-                'data': ''
+                status: true,
+                message: 'error occurred',
+                'data': error
             })
         }
     }

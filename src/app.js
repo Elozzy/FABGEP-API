@@ -19,7 +19,7 @@ app.use('/api/v1/', usersRouter);
 app.get('/', (request, response) => {
   return response.status(200).json({
     status: true, data: '',
-    message: 'Welcome to Farmmoni API'
+    message: 'Welcome to Foodmoni API'
   })
 })
 // catch 404 and forward to error handler
@@ -29,10 +29,10 @@ app.use((request, response, next) => {
 
 // error handler
 app.use((error, request, response, next) => {
-
+  console.log(error);
   response.status(error.status || 500).json({
     status: false, data: error,
-    message: request.app.get('env') === 'development' ? error : {}
+    message: 'Service not available'
   })
 });
 const port = process.env.PORT || 5000;

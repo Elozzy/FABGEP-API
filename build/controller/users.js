@@ -21,6 +21,8 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _Mongodb = _interopRequireDefault(require("../database/Mongodb"));
 
+var _cookiejar = require("cookiejar");
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -38,44 +40,62 @@ function () {
       var _userSignup = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee(request, response) {
-        var _response$status$json, userData, result, data, token;
-
+        var userData;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                userData = _objectSpread({}, request.body);
-                _context.next = 4;
-                return _Mongodb["default"].insert('users', userData);
+                userData = _objectSpread({}, request.body); // check if email is already in use by someone else
 
-              case 4:
-                result = _context.sent;
-                data = _objectSpread({}, result.ops[0]);
-                token = _jsonwebtoken["default"].sign(data, 'foodmoni');
-                return _context.abrupt("return", response.status(200).json((_response$status$json = {
-                  status: true,
-                  data: ''
-                }, (0, _defineProperty2["default"])(_response$status$json, "data", {
-                  token: token,
-                  data: data
-                }), (0, _defineProperty2["default"])(_response$status$json, "message", 'success'), _response$status$json)));
+                _Mongodb["default"].findOne('users', {
+                  email: userData.email
+                }, function (err, data) {
+                  if (err) {
+                    response.status(400).json({
+                      'status': false,
+                      'message': "error ocurred",
+                      data: ''
+                    });
+                  }
 
-              case 10:
-                _context.prev = 10;
+                  if (data) {
+                    console.log(data);
+                    response.status(400).json({
+                      'status': false,
+                      'message': "email already in use",
+                      data: ''
+                    });
+                  }
+                }); // const getAcccountNumber = await MDBConnect.findOne('index_account_number', { staus: true });
+                // const result = await MDBConnect.insert('users', userData);
+                // const data = { ...result.ops[0] };
+                // const token = jwt.sign(data, 'foodmoni');
+                // return response.status(200).json({
+                //     status: true, data: '',
+                //     data: { token, data },
+                //     message: 'success'
+                // })
+
+
+                _context.next = 8;
+                break;
+
+              case 5:
+                _context.prev = 5;
                 _context.t0 = _context["catch"](0);
-                return _context.abrupt("return", response.status(500).json((0, _defineProperty2["default"])({
+                return _context.abrupt("return", response.status(500).json({
                   status: true,
-                  data: '',
-                  message: 'Service not available'
-                }, "data", '')));
+                  message: 'error occurred',
+                  'data': _context.t0
+                }));
 
-              case 13:
+              case 8:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 10]]);
+        }, _callee, null, [[0, 5]]);
       }));
 
       function userSignup(_x, _x2) {

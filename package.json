@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d build",
     "start": "node build/app.js",
-    "serve": "babel-node src/app.js",
+    "serve": "nodemon babel-node src/app.js",
     "dev": "nodemon --exec babel-node app.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
