@@ -1,19 +1,19 @@
 import { MongoClient } from 'mongodb';
-const CONNECTION_URL = "mongodb+srv://foodmoni:B9aCRPAHQf5T1sjZ@cluster0-ax5bs.mongodb.net/test?retryWrites=true&w=majority";
-const db = 'foodmoni';
+const CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority";
+const db = 'KW-FABGEP';
 
 class MDBConnect {
-    static async connect (collection) {
+    static async connect(collection) {
         try {
             const client = await MongoClient.connect(CONNECTION_URL);
-            return client.db('foodmoni').collection(collection);
+            return client.db(db).collection(collection);
         }
         catch (err) {
             console.log(err);
         }
     }
     static async findOne(collection, query) {
-        const c = await MDBConnect.connect('foodmoni', collection);
+        const c = await MDBConnect.connect(db, collection);
         const result = await c.findOne(query);
         return result;
     }

@@ -5,128 +5,180 @@
 
 const isEmpty = value => {
     return (
-      value === undefined ||
-      value === null ||
-      (typeof value === 'object' && Object.keys(value).length === 0) ||
-      (typeof value === 'string' && value.trim().length === 0)
+        value === undefined ||
+        value === null ||
+        (typeof value === 'object' && Object.keys(value).length === 0) ||
+        (typeof value === 'string' && value.trim().length === 0)
     );
-  };
+};
 const isValidEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,10})$/;
-const isIntegar= /^(?:[1-9]\d*|\d)$/; 
-const isValidAlphabet= /^[a-zA-Z ]*$/;
+const isIntegar = /^(?:[1-9]\d*|\d)$/;
+const isValidAlphabet = /^[a-zA-Z ]*$/;
 const isValidName = /^[a-zA-Z]{3,15}$/;
 const isValidPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-const whiteSpace =/\s/g;
+const whiteSpace = /\s/g;
 const isBoolean = /^(true|false|1|0)$/;
 const isValidPhone = /^[0-9]{8,16}$/;
 
-class UserValidation{
-    static userSignup(request, response, next){
-         /**
+class UserValidation {
+    static userSignup(request, response, next) {
+        /**
          * @description Valdiate user signup details 
          * @param { Object } request contains the user details
          * @param { Object } response contains response sent to the user
          * @return { json }
          */
-        const { firstName, lastName, email, password, phone, isAdmin} = request.body;
-        if (Object.keys(request.body).length >6) {
+        const {
+            firstName,
+            lastName,
+            email,
+            pwd,
+            phone
+        } = request.body;
+        if (Object.keys(request.body).length > 6) {
             return response.status(400).json({
-              status: 400,
-              error: 'Only First Name, Last Name, Email and Password is required'
+                status: true,
+                data: '',
+                message: 'Only First Name, Last Name, Email and Password is required'
             });
         }
-        if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(password) && isEmpty(phone)) {
+        if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(pwd) && isEmpty(phone)) {
             return response.status(400).json({
-              status: 400,
-              error: 'First Name, Last Name, Email, Password and Phone number field are required'
+                status: true,
+                data: '',
+                message: 'First Name, Last Name, Email, Password and Phone number field are required'
             });
         }
-        if(isEmpty(firstName)){
+        if (isEmpty(firstName)) {
             return response.status(400).json({
-                status: 400,
-                error: 'First name is required'
+                status: true,
+                data: '',
+                message: 'First name is required'
             })
         }
-        if(!isValidAlphabet.test(firstName)){
+        if (!isValidAlphabet.test(firstName)) {
             return response.status(422).json({
-                status: 422,
-                error: 'First name can only contain alphabets'
+                status: false,
+                data: '',
+                message: 'First name can only contain alphabets'
             })
         }
-        if(!isValidName.test(firstName)){
+        if (!isValidName.test(firstName)) {
             return response.status(422).json({
-                status: 422,
-                error: 'First name should not contain spaces and be less than 3 or more than 15'
+                status: false,
+                data: '',
+                message: 'First name should not contain spaces and be less than 3 or more than 15'
             })
         }
-        if(isEmpty(lastName)){
+        if (isEmpty(lastName)) {
             return response.status(400).json({
-                status: 400,
-                error: 'Last name is required'
+                status: true,
+                data: '',
+                message: 'Last name is required'
             })
         }
-        if(!isValidAlphabet.test(lastName)){
+        if (!isValidAlphabet.test(lastName)) {
             return response.status(422).json({
-                status: 422,
-                error: 'Last name can only contain alphabets'
+                status: false,
+                data: '',
+                message: 'Last name can only contain alphabets'
             })
         }
-        if(!isValidName.test(lastName)){
+        if (!isValidName.test(lastName)) {
             return response.status(422).json({
-                status: 422,
-                error: 'Last name should not contain spaces be less than 3 or greater than 15'
+                status: false,
+                data: '',
+                message: 'Last name should not contain spaces be less than 3 or greater than 15'
             })
         }
-        if(isEmpty(password)){
+        if (isEmpty(pwd)) {
             return response.status(400).json({
-                status: 400,
-                error: 'Password is required'
+                status: true,
+                data: '',
+                message: 'Password is required'
             })
         }
-        if(!isValidPassword.test(password)){
+        if (!isValidPassword.test(pwd)) {
             return response.status(422).json({
-                status: 422,
-                error: 'Password should contain m`inimum eight characters, at least one letter and one number:'
+                status: false,
+                data: '',
+                message: 'Password should contain minimum eight characters, at least one letter and one number:'
             })
         }
-        if(isEmpty(email)){
+        if (isEmpty(email)) {
             return response.status(400).json({
-                status: 400,
-                error: 'Email is required'
+                status: true,
+                data: '',
+                message: 'Email is required'
             })
         }
-        if(!isValidEmail.test(email)){
+        if (!isValidEmail.test(email)) {
             return response.status(422).json({
-                status: 422,
-                error: 'Invalid email address'
+                status: false,
+                data: '',
+                message: 'Invalid email address'
             })
         }
-        if(isEmpty(phone)){
-            return response.status(400).json({
-                status: 400,
-                error: 'Phone number is required'
-            })
-        }
-        if(!isValidPhone.test(phone)){
-            return response.status(422).json({
-                status: 422,
-                error: 'Invalid phone number, phone number should not be less than 8 and more than 16'
-            })
-        }
-        if(!isBoolean.test(isAdmin)){
-            return response.status(422).json({
-                status: 422,
-                error: 'Invalid input, isAdmin can only be true or false'
-            })
-        }
+        // if(isEmpty(phone)){
+        //     return response.status(400).json({
+        //         status: true,data: '',
+        //         message: 'Phone number is required'
+        //     })
+        // }
+        // if(!isValidPhone.test(phone)){
+        //     return response.status(422).json({
+        //         status: false,data:'',
+        //         message: 'Invalid phone number, phone number should not be less than 8 and more than 16'
+        //     })
+        // }
+        // if(!isBoolean.test(isAdmin)){
+        //     return response.status(422).json({
+        //         status: false,data:'',
+        //         message: 'Invalid input, isAdmin can only be true or false'
+        //     })
+        // }
         next();
 
     }
-    static userLogin(request, response, next){
+    static userLogin(request, response, next) {
 
+        const {
+            email,
+            pwd
+        } = request.body;
+
+        if (isEmpty(email)) {
+            return response.status(400).json({
+                status: true,
+                data: '',
+                message: 'Email is required'
+            })
+        }
+        if (!isValidEmail.test(email)) {
+            return response.status(422).json({
+                status: false,
+                data: '',
+                message: 'Invalid email address'
+            })
+        }
+        if (isEmpty(pwd)) {
+            return response.status(400).json({
+                status: true,
+                data: '',
+                message: 'Password is required'
+            })
+        }
+        if (!isValidPassword.test(pwd)) {
+            return response.status(422).json({
+                status: false,
+                data: '',
+                message: 'Password should contain minimum eight characters, at least one letter and one number:'
+            })
+        }
+        next();
     }
-    static userProfile(request, response, next){
-        
+    static userProfile(request, response, next) {
+
     }
 }
 
