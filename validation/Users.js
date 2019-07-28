@@ -18,6 +18,7 @@ const isValidName = /^[a-zA-Z]{3,15}$/;
 const isValidPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const whiteSpace = /\s/g;
 const isBoolean = /^(true|false|1|0)$/;
+const isValidPhone = /^[0-9]{8,16}$/;
 
 class UserValidation {
     static userSignup(request, response, next) {
@@ -27,17 +28,17 @@ class UserValidation {
         * @param { Object } response contains response sent to the user
         * @return { json }
         */
-        const { firstName, lastName, email, pwd, isAdmin } = request.body;
-        if (Object.keys(request.body).length > 5) {
+        const { firstName, lastName, email, pwd, phone, isAdmin } = request.body;
+        if (Object.keys(request.body).length > 6) {
             return response.status(400).json({
                 status: 400,
                 error: 'Only First Name, Last Name, Email and Password is required'
             });
         }
-        if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(pwd)) {
+        if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(pwd) /*&& isEmpty(phone)*/) {
             return response.status(400).json({
                 status: 400,
-                error: 'First Name, Last Name, Email and Password field are required'
+                error: 'First Name, Last Name, Email, Password and Phone number field are required'
             });
         }
         if (isEmpty(firstName)) {
@@ -100,12 +101,24 @@ class UserValidation {
                 error: 'Invalid email address'
             })
         }
-        if (!isBoolean.test(is_admin)) {
-            return response.status(422).json({
-                status: 422,
-                error: 'Invalid input, is_admin can only be true or false'
-            })
-        }
+        // if (isEmpty(phone)) {
+        //     return response.status(400).json({
+        //         status: 400,
+        //         error: 'Phone number is required'
+        //     })
+        // }
+        // if (!isValidPhone.test(phone)) {
+        //     return response.status(422).json({
+        //         status: 422,
+        //         error: 'Invalid phone number, phone number should not be less than 8 and more than 16'
+        //     })
+        // }
+        // if (!isBoolean.test(isAdmin)) {
+        //     return response.status(422).json({
+        //         status: 422,
+        //         error: 'Invalid input, isAdmin can only be true or false'
+        //     })
+        // }
         next();
 
     }

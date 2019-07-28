@@ -1,5 +1,8 @@
 import { Router } from 'express';
-var router = Router();
+import Controller from '../controller/users';
+import Validation from '../validation/Users';
 
-router.post('/signup', )
+const router = Router();
+
+router.post('/signup', Validation.userSignup, Controller.userSignup ); 
 export default router;
