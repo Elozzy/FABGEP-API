@@ -4,12 +4,14 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "babel-node app.js",
+    "build": "babel src -d build",
+    "start": "babel-node src/app.js",
     "dev": "nodemon --exec babel-node app.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "test": "nyc mocha test/*js --require @babel/register --exit --timeout 20000"
   },
+
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "bcryptjs": "^2.4.3",

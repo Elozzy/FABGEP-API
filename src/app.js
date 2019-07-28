@@ -33,7 +33,7 @@ app.use((error, request, response, next) => {
     error: request.app.get('env') === 'development' ? error : {}
   })
 });
-const port = process.env.PORT || 4000;
-app.listen(port, () => { console.log(`Server Online: ${port}`) });
+const port = process.env.PORT || 5000;
+app.listen(port, () => { console.log(`Server Running:  ${port}`) });
 
 export default app;
