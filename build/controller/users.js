@@ -26,69 +26,73 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var Users =
-  /*#__PURE__*/
-  function () {
-    function Users() {
-      (0, _classCallCheck2["default"])(this, Users);
-    }
+/*#__PURE__*/
+function () {
+  function Users() {
+    (0, _classCallCheck2["default"])(this, Users);
+  }
 
-    (0, _createClass2["default"])(Users, null, [{
-      key: "userSignup",
-      value: function () {
-        var _userSignup = (0, _asyncToGenerator2["default"])(
-          /*#__PURE__*/
-          _regenerator["default"].mark(function _callee(request, response) {
-            var userData, result, data, token;
-            return _regenerator["default"].wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    _context.prev = 0;
-                    userData = _objectSpread({}, request.body);
-                    _context.next = 4;
-                    return _Mongodb["default"].insert('users', userData);
+  (0, _createClass2["default"])(Users, null, [{
+    key: "userSignup",
+    value: function () {
+      var _userSignup = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee(request, response) {
+        var _response$status$json, userData, result, data, token;
 
-                  case 4:
-                    result = _context.sent;
-                    data = _objectSpread({}, result.ops[0]);
-                    token = _jsonwebtoken["default"].sign(data, 'foodmoni');
-                    return _context.abrupt("return", response.status(200).json({
-                      status: true, data: '',
-                      token: token,
-                      data: data
-                    }));
+        return _regenerator["default"].wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                userData = _objectSpread({}, request.body);
+                _context.next = 4;
+                return _Mongodb["default"].insert('users', userData);
 
-                  case 10:
-                    _context.prev = 10;
-                    _context.t0 = _context["catch"](0);
-                    return _context.abrupt("return", response.status(500).json({
-                      status: 500,
-                      message: 'Service not available'
-                    }));
+              case 4:
+                result = _context.sent;
+                data = _objectSpread({}, result.ops[0]);
+                token = _jsonwebtoken["default"].sign(data, 'foodmoni');
+                return _context.abrupt("return", response.status(200).json((_response$status$json = {
+                  status: true,
+                  data: ''
+                }, (0, _defineProperty2["default"])(_response$status$json, "data", {
+                  token: token,
+                  data: data
+                }), (0, _defineProperty2["default"])(_response$status$json, "message", 'success'), _response$status$json)));
 
-                  case 13:
-                  case "end":
-                    return _context.stop();
-                }
-              }
-            }, _callee, null, [[0, 10]]);
-          }));
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](0);
+                return _context.abrupt("return", response.status(500).json((0, _defineProperty2["default"])({
+                  status: true,
+                  data: '',
+                  message: 'Service not available'
+                }, "data", '')));
 
-        function userSignup(_x, _x2) {
-          return _userSignup.apply(this, arguments);
-        }
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 10]]);
+      }));
 
-        return userSignup;
-      }()
-    }, {
-      key: "userLogin",
-      value: function userLogin(request, response) { }
-    }, {
-      key: "userProfile",
-      value: function userProfile(request, response) { }
-    }]);
-    return Users;
-  }();
+      function userSignup(_x, _x2) {
+        return _userSignup.apply(this, arguments);
+      }
+
+      return userSignup;
+    }()
+  }, {
+    key: "userLogin",
+    value: function userLogin(request, response) {}
+  }, {
+    key: "userProfile",
+    value: function userProfile(request, response) {}
+  }]);
+  return Users;
+}();
 
 var _default = Users;
 exports["default"] = _default;

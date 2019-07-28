@@ -17,8 +17,8 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _mongodb = require("mongodb");
 
-var CONNECTION_URL = "mongodb+srv://foodmoni:B9aCRPAHQf5T1sjZ@cluster0-ax5bs.mongodb.net/test?retryWrites=true&w=majority";
-var db = 'foodmoni';
+var CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority";
+var db = 'KW-FABGEP';
 
 var MDBConnect =
 /*#__PURE__*/
@@ -44,7 +44,7 @@ function () {
 
               case 3:
                 client = _context.sent;
-                return _context.abrupt("return", client.db('foodmoni').collection(collection));
+                return _context.abrupt("return", client.db(db).collection(collection));
 
               case 7:
                 _context.prev = 7;
@@ -77,7 +77,7 @@ function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return MDBConnect.connect('foodmoni', collection);
+                return MDBConnect.connect(db, collection);
 
               case 2:
                 c = _context2.sent;

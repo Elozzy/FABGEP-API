@@ -33,6 +33,7 @@ function () {
       } catch (error) {
         return response.status(401).json({
           status: 401,
+          data: '',
           message: "Authorization failed, Please Login"
         });
       }
@@ -43,3 +44,4 @@ function () {
 
 var _default = Token;
 exports["default"] = _default;
+3;

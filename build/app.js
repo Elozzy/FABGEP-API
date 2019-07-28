@@ -32,7 +32,8 @@ app.use((0, _express.urlencoded)({
 app.use('/api/v1/', _users["default"]);
 app.get('/', function (request, response) {
   return response.status(200).json({
-    status: true, data: '',
+    status: true,
+    data: '',
     message: 'Welcome to Farmmoni API'
   });
 }); // catch 404 and forward to error handler
@@ -43,7 +44,8 @@ app.use(function (request, response, next) {
 
 app.use(function (error, request, response, next) {
   response.status(error.status || 500).json({
-    status: error || 500,
+    status: false,
+    data: error,
     message: request.app.get('env') === 'development' ? error : {}
   });
 });
