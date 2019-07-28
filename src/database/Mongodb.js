@@ -12,10 +12,14 @@ class MDBConnect {
             console.log(err);
         }
     }
-    static async findOne(collection, query, callBack) {
+    static async findOne(collection, query,) {
+        try{
         const c = await MDBConnect.connect(collection);
-        await c.findOne(query, callBack);
-
+        const result = await c.findOne(query);
+        return result;
+        }catch(error){
+            return error;
+        }
 
     }
     static async insert(collection, query) {
