@@ -1,3 +1,5 @@
+require("babel-core/register");
+require("babel-polyfill");
 import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import { join } from 'path';
@@ -16,8 +18,8 @@ app.use(urlencoded({ extended: false }));
 app.use('/api/v1/', usersRouter);
 app.get('/', (request, response) => {
   return response.status(200).json({
-    status: 200,
-    error: 'Welcome to Foodmoni API'
+    status: true, data: '',
+    message: 'Welcome to Farmmoni API'
   })
 })
 // catch 404 and forward to error handler
@@ -29,8 +31,8 @@ app.use((request, response, next) => {
 app.use((error, request, response, next) => {
 
   response.status(error.status || 500).json({
-    status: error || 500,
-    error: request.app.get('env') === 'development' ? error : {}
+    status: false, data: error,
+    message: request.app.get('env') === 'development' ? error : {}
   })
 });
 const port = process.env.PORT || 5000;

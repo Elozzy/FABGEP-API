@@ -16,3 +16,15 @@ The Kwara Food and Agricultural Business Growth Enhancement Program - KW-FABGEP 
 - /getAllUserInvestment: fetch all user investment packages
 - /addCard: add a new card details to user account
 - /getCard: fetch a user card details 
+
+
+
+### Endpoint respones format
+
+```
+{
+    status: true,data: '',      // bool
+    message: 'success' // String
+    data: any          // contains request result
+}
+```

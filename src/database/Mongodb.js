@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-const CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority"
+const CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority";
 const db = 'KW-FABGEP';
 
 class MDBConnect {
