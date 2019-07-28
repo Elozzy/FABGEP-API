@@ -7,7 +7,7 @@
     "build": "babel src -d build",
     "start": "node build/app.js",
     "serve": "nodemon babel-node src/app.js",
-    "dev": "nodemon --exec babel-node app.js",
+    "dev": "nodemon --exec babel-node src/app.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "test": "nyc mocha test/*js --require @babel/register --exit --timeout 20000"
@@ -34,7 +34,6 @@
     "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
-
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.4",

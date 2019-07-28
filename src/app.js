@@ -1,5 +1,5 @@
 require("babel-core/register");
-require("babel-polyfill");
+import '@babel/polyfill';
 import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import { join } from 'path';
