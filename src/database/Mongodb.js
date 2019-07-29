@@ -12,19 +12,34 @@ class MDBConnect {
             console.log(err);
         }
     }
-    static async findOne(collection, query,) {
-        try{
-        const c = await MDBConnect.connect(collection);
-        const result = await c.findOne(query);
-        return result;
-        }catch(error){
+    static async findOne(collection, keyPair, ) {
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.findOne(keyPair);
+            return result;
+        } catch (error) {
             return error;
         }
 
     }
-    static async insert(collection, query) {
+    static async insertOne(collection, query) {
         const c = await MDBConnect.connect(collection);
         const result = await c.insertOne(query);
+        return result;
+    }
+    static async insertMany(collection, query) {
+        const c = await MDBConnect.connect(collection);
+        const result = await c.insertMany(query);
+        return result;
+    }
+    static async updateOne(collection, keyPair, update) {
+        const c = await MDBConnect.connect(collection);
+        const result = await c.updateOne(keyPair, { $set: update });
+        return result;
+    }
+    static async findOneAndReplace(collection, keyPair, modification) {
+        const c = await MDBConnect.connect(collection);
+        const result = await c.findOneAndReplace(keyPair, modification, { returnNewDocument: true, maxTimeMS: 10 });
         return result;
     }
 }

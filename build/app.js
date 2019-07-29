@@ -9,6 +9,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+require("@babel/polyfill");
+
 var _httpErrors = _interopRequireDefault(require("http-errors"));
 
 var _express = _interopRequireWildcard(require("express"));
@@ -20,8 +22,6 @@ var _morgan = _interopRequireDefault(require("morgan"));
 var _users = _interopRequireDefault(require("./routes/users"));
 
 require("babel-core/register");
-
-require("babel-polyfill");
 
 var app = (0, _express["default"])();
 app.use((0, _morgan["default"])('dev'));
