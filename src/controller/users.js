@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken';
 import MDBConnect from '../database/Mongodb';
-import {
-    CookieAccessInfo
-} from 'cookiejar';
+
 import Encryptor from '../helper/encryptor';
 import uuid from 'uuid/v4';
-const jwtKey = "88200819970317";
+const jwtKey = "(88200819970317@CyberCop)";
 class Users {
 
     static async  generateNumber() {
@@ -31,7 +29,6 @@ class Users {
             // set user unique identification number
             userData.uid = uuid();
 
-
             // check if email is already in use by someone else
             const checkEmail = await MDBConnect.findOne('users', {
                 email: userData.email
@@ -42,6 +39,11 @@ class Users {
                     'message': `email already in use`
                 });
             }
+
+            // encrypted user password  
+            const encryptedPassword = Encryptor.encrypt(userData.pwd);
+            userData.pwd = encryptedPassword;
+
 
             // generate a purse number 
             const purseNumber = await Users.generateNumber();
@@ -106,30 +108,28 @@ class Users {
                 email: loginData.email
             });
             if (!checkEmail) {
-                return response.status(409).json({
+                return response.status(401).json({
                     'status': false,
                     'message': `Incorrect email address or password`
                 });
             }
+
             // decrypt and compare password
             const comparePassword = Encryptor.compare(loginData.pwd, checkEmail.pwd);
             if (!comparePassword) {
-                return response.status(409).json({
+                return response.status(401).json({
                     'status': false,
                     'message': `Incorrect email address or password`
                 });
             }
-            const {
-                pwd,
-                ...payload
-            } = checkEmail;
+
             // generating token to access userData on other routes
-            const token = jwt.sign(payload, 'foodmoni')
+            const token = jwt.sign(checkEmail, jwtKey)
             // return data Object
             return response.status(200).json({
                 'status': true,
-                data: payload,
-                token,
+                data: { token, data: checkEmail },
+
                 'message': `Login was successful`,
             });
 
@@ -142,8 +142,30 @@ class Users {
         }
 
     }
-    static userProfile(request, response) {
+    static async userProfile(request, response) {
+        try {
+            const { uid } = request.query;
+            const data = await MDBConnect.findOne('users', { uid });
+            if (!data) {
+                return response.status(404).json({
+                    status: false,
+                    message: 'no document found',
+                    'data': data
+                })
+            }
+            return response.status(200).json({
+                'status': true,
+                data,
 
+                'message': `document found`,
+            });
+        } catch (error) {
+            return response.status(500).json({
+                status: false,
+                message: 'error occurred',
+                'data': error
+            })
+        }
     }
 }
 

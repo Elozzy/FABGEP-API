@@ -7,8 +7,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
@@ -25,8 +23,6 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _Mongodb = _interopRequireDefault(require("../database/Mongodb"));
 
-var _cookiejar = require("cookiejar");
-
 var _encryptor = _interopRequireDefault(require("../helper/encryptor"));
 
 var _v = _interopRequireDefault(require("uuid/v4"));
@@ -35,7 +31,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-var jwtKey = "88200819970317";
+var jwtKey = "(88200819970317@CyberCop)";
 
 var Users =
 /*#__PURE__*/
@@ -98,7 +94,7 @@ function () {
       var _userSignup = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(request, response) {
-        var userData, checkEmail, purseNumber, purse, createUserAccount, createPurseAccount, token;
+        var userData, checkEmail, encryptedPassword, purseNumber, purse, createUserAccount, createPurseAccount, token;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -127,10 +123,14 @@ function () {
                 }));
 
               case 8:
-                _context2.next = 10;
+                // encrypted user password  
+                encryptedPassword = _encryptor["default"].encrypt(userData.pwd);
+                userData.pwd = encryptedPassword; // generate a purse number 
+
+                _context2.next = 12;
                 return Users.generateNumber();
 
-              case 10:
+              case 12:
                 purseNumber = _context2.sent;
                 // link purse number to user account
                 userData.purseNumber = purseNumber;
@@ -143,14 +143,14 @@ function () {
                   lastUpdateTimestamp: Date.now() // storing user account into the database
 
                 };
-                _context2.next = 15;
+                _context2.next = 17;
                 return _Mongodb["default"].insertOne('users', userData);
 
-              case 15:
+              case 17:
                 createUserAccount = _context2.sent;
 
                 if (createUserAccount) {
-                  _context2.next = 19;
+                  _context2.next = 21;
                   break;
                 }
 
@@ -161,15 +161,15 @@ function () {
                   'data': ''
                 }));
 
-              case 19:
-                _context2.next = 21;
+              case 21:
+                _context2.next = 23;
                 return _Mongodb["default"].insertOne('account', purse);
 
-              case 21:
+              case 23:
                 createPurseAccount = _context2.sent;
 
                 if (createPurseAccount) {
-                  _context2.next = 25;
+                  _context2.next = 27;
                   break;
                 }
 
@@ -180,7 +180,7 @@ function () {
                   'data': ''
                 }));
 
-              case 25:
+              case 27:
                 // generating token to access userData on other routes
                 token = _jsonwebtoken["default"].sign({
                   uid: userData.uid,
@@ -193,8 +193,8 @@ function () {
                   'message': "success"
                 }));
 
-              case 29:
-                _context2.prev = 29;
+              case 31:
+                _context2.prev = 31;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", response.status(500).json({
                   status: false,
@@ -202,12 +202,12 @@ function () {
                   'data': _context2.t0
                 }));
 
-              case 32:
+              case 34:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 29]]);
+        }, _callee2, null, [[0, 31]]);
       }));
 
       function userSignup(_x, _x2) {
@@ -222,7 +222,7 @@ function () {
       var _userLogin = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(request, response) {
-        var loginData, checkEmail, comparePassword, pwd, payload, token;
+        var loginData, checkEmail, comparePassword, token;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -243,7 +243,7 @@ function () {
                   break;
                 }
 
-                return _context3.abrupt("return", response.status(409).json({
+                return _context3.abrupt("return", response.status(401).json({
                   'status': false,
                   'message': "Incorrect email address or password"
                 }));
@@ -257,25 +257,26 @@ function () {
                   break;
                 }
 
-                return _context3.abrupt("return", response.status(409).json({
+                return _context3.abrupt("return", response.status(401).json({
                   'status': false,
                   'message': "Incorrect email address or password"
                 }));
 
               case 10:
-                pwd = checkEmail.pwd, payload = (0, _objectWithoutProperties2["default"])(checkEmail, ["pwd"]); // generating token to access userData on other routes
-
-                token = _jsonwebtoken["default"].sign(payload, 'foodmoni'); // return data Object
+                // generating token to access userData on other routes
+                token = _jsonwebtoken["default"].sign(checkEmail, jwtKey); // return data Object
 
                 return _context3.abrupt("return", response.status(200).json({
                   'status': true,
-                  data: payload,
-                  token: token,
+                  data: {
+                    token: token,
+                    data: checkEmail
+                  },
                   'message': "Login was successful"
                 }));
 
-              case 15:
-                _context3.prev = 15;
+              case 14:
+                _context3.prev = 14;
                 _context3.t0 = _context3["catch"](0);
                 return _context3.abrupt("return", response.status(500).json({
                   status: false,
@@ -283,12 +284,12 @@ function () {
                   'data': _context3.t0
                 }));
 
-              case 18:
+              case 17:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 15]]);
+        }, _callee3, null, [[0, 14]]);
       }));
 
       function userLogin(_x3, _x4) {
@@ -299,7 +300,66 @@ function () {
     }()
   }, {
     key: "userProfile",
-    value: function userProfile(request, response) {}
+    value: function () {
+      var _userProfile = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee4(request, response) {
+        var uid, data;
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                uid = request.query.uid;
+                _context4.next = 4;
+                return _Mongodb["default"].findOne('users', {
+                  uid: uid
+                });
+
+              case 4:
+                data = _context4.sent;
+
+                if (data) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                return _context4.abrupt("return", response.status(404).json({
+                  status: false,
+                  message: 'no document found',
+                  'data': data
+                }));
+
+              case 7:
+                return _context4.abrupt("return", response.status(200).json({
+                  'status': true,
+                  data: data,
+                  'message': "document found"
+                }));
+
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4["catch"](0);
+                return _context4.abrupt("return", response.status(500).json({
+                  status: false,
+                  message: 'error occurred',
+                  'data': _context4.t0
+                }));
+
+              case 13:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 10]]);
+      }));
+
+      function userProfile(_x5, _x6) {
+        return _userProfile.apply(this, arguments);
+      }
+
+      return userProfile;
+    }()
   }]);
   return Users;
 }();

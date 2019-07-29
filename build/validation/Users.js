@@ -171,6 +171,14 @@ function () {
           email = _request$body2.email,
           pwd = _request$body2.pwd;
 
+      if (Object.keys(request.body).length > 2) {
+        return response.status(400).json({
+          status: true,
+          data: '',
+          message: 'Only Email and Password is required'
+        });
+      }
+
       if (isEmpty(email)) {
         return response.status(400).json({
           status: true,
@@ -207,7 +215,27 @@ function () {
     }
   }, {
     key: "userProfile",
-    value: function userProfile(request, response, next) {}
+    value: function userProfile(request, response, next) {
+      var uid = request.query.uid;
+
+      if (Object.keys(request.query).length > 1) {
+        return response.status(400).json({
+          status: true,
+          data: '',
+          message: 'Only uid required'
+        });
+      }
+
+      if (isEmpty(uid)) {
+        return response.status(400).json({
+          status: true,
+          data: '',
+          message: 'uid is required'
+        });
+      }
+
+      next();
+    }
   }]);
   return UserValidation;
 }();
