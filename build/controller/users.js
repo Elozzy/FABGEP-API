@@ -31,7 +31,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-var jwtKey = "(88200819970317@CyberCop)";
+var jwtKey = "(88200819970317@CyberCop);;;;;;;;;;;";
 
 var Users =
 /*#__PURE__*/
@@ -102,18 +102,20 @@ function () {
                 _context2.prev = 0;
                 userData = (0, _extends2["default"])({}, request.body); // set user unique identification number
 
-                userData.uid = (0, _v["default"])(); // check if email is already in use by someone else
+                userData.uid = (0, _v["default"])(); // set timestamp
 
-                _context2.next = 5;
+                userData.timestamp = Date.now(); // check if email is already in use by someone else
+
+                _context2.next = 6;
                 return _Mongodb["default"].findOne('users', {
                   email: userData.email
                 });
 
-              case 5:
+              case 6:
                 checkEmail = _context2.sent;
 
                 if (!(checkEmail != null)) {
-                  _context2.next = 8;
+                  _context2.next = 9;
                   break;
                 }
 
@@ -122,15 +124,15 @@ function () {
                   'message': "email already in use"
                 }));
 
-              case 8:
+              case 9:
                 // encrypted user password  
                 encryptedPassword = _encryptor["default"].encrypt(userData.pwd);
                 userData.pwd = encryptedPassword; // generate a purse number 
 
-                _context2.next = 12;
+                _context2.next = 13;
                 return Users.generateNumber();
 
-              case 12:
+              case 13:
                 purseNumber = _context2.sent;
                 // link purse number to user account
                 userData.purseNumber = purseNumber;
@@ -138,19 +140,21 @@ function () {
                   number: purseNumber,
                   balance: 0.0,
                   bonusBalance: 0.0,
+                  bonusLock: true,
+                  purseLock: false,
                   purseOwner: userData.uid,
                   createTimestamp: Date.now(),
                   lastUpdateTimestamp: Date.now() // storing user account into the database
 
                 };
-                _context2.next = 17;
+                _context2.next = 18;
                 return _Mongodb["default"].insertOne('users', userData);
 
-              case 17:
+              case 18:
                 createUserAccount = _context2.sent;
 
                 if (createUserAccount) {
-                  _context2.next = 21;
+                  _context2.next = 22;
                   break;
                 }
 
@@ -161,15 +165,15 @@ function () {
                   'data': ''
                 }));
 
-              case 21:
-                _context2.next = 23;
+              case 22:
+                _context2.next = 24;
                 return _Mongodb["default"].insertOne('account', purse);
 
-              case 23:
+              case 24:
                 createPurseAccount = _context2.sent;
 
                 if (createPurseAccount) {
-                  _context2.next = 27;
+                  _context2.next = 28;
                   break;
                 }
 
@@ -180,7 +184,7 @@ function () {
                   'data': ''
                 }));
 
-              case 27:
+              case 28:
                 // generating token to access userData on other routes
                 token = _jsonwebtoken["default"].sign({
                   uid: userData.uid,
@@ -193,8 +197,8 @@ function () {
                   'message': "success"
                 }));
 
-              case 31:
-                _context2.prev = 31;
+              case 32:
+                _context2.prev = 32;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", response.status(500).json({
                   status: false,
@@ -202,12 +206,12 @@ function () {
                   'data': _context2.t0
                 }));
 
-              case 34:
+              case 35:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 31]]);
+        }, _callee2, null, [[0, 32]]);
       }));
 
       function userSignup(_x, _x2) {
@@ -264,7 +268,9 @@ function () {
 
               case 10:
                 // generating token to access userData on other routes
-                token = _jsonwebtoken["default"].sign(checkEmail, jwtKey); // return data Object
+                token = _jsonwebtoken["default"].sign(checkEmail, jwtKey); // delete pwd form object
+
+                delete checkEmail['pwd']; // return data Object
 
                 return _context3.abrupt("return", response.status(200).json({
                   'status': true,
@@ -275,8 +281,8 @@ function () {
                   'message': "Login was successful"
                 }));
 
-              case 14:
-                _context3.prev = 14;
+              case 15:
+                _context3.prev = 15;
                 _context3.t0 = _context3["catch"](0);
                 return _context3.abrupt("return", response.status(500).json({
                   status: false,
@@ -284,12 +290,12 @@ function () {
                   'data': _context3.t0
                 }));
 
-              case 17:
+              case 18:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 14]]);
+        }, _callee3, null, [[0, 15]]);
       }));
 
       function userLogin(_x3, _x4) {

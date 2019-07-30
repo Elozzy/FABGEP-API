@@ -1,4 +1,5 @@
 require("babel-core/register");
+import ip from 'ip';
 import '@babel/polyfill';
 import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
@@ -38,6 +39,7 @@ app.use((error, request, response, next) => {
   })
 });
 const port = process.env.PORT || 5000;
-app.listen(port, () => { console.log(`Server Running:  ${port}`) });
+const host = process.env.IP || ip.address();
+app.listen(port, host, () => { console.log(`Server Running on host:${host} port: ${port}`) });
 
 export default app;

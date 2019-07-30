@@ -27,9 +27,9 @@ function () {
   }
 
   (0, _createClass2["default"])(Purse, null, [{
-    key: "getPurse",
+    key: "purse",
     value: function () {
-      var _getPurse = (0, _asyncToGenerator2["default"])(
+      var _purse = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee(request, response) {
         var uid, account, secureData;
@@ -81,11 +81,11 @@ function () {
         }, _callee, null, [[1, 10]]);
       }));
 
-      function getPurse(_x, _x2) {
-        return _getPurse.apply(this, arguments);
+      function purse(_x, _x2) {
+        return _purse.apply(this, arguments);
       }
 
-      return getPurse;
+      return purse;
     }()
   }]);
   return Purse;

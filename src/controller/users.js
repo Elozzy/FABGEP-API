@@ -3,7 +3,7 @@ import MDBConnect from '../database/Mongodb';
 
 import Encryptor from '../helper/encryptor';
 import uuid from 'uuid/v4';
-const jwtKey = "(88200819970317@CyberCop)";
+const jwtKey = "(88200819970317@CyberCop);;;;;;;;;;;";
 class Users {
 
     static async  generateNumber() {
@@ -55,6 +55,8 @@ class Users {
                 number: purseNumber,
                 balance: 0.0,
                 bonusBalance: 0.0,
+                bonusLock: true,
+                purseLock: false,
                 purseOwner: userData.uid,
                 createTimestamp: Date.now(),
                 lastUpdateTimestamp: Date.now()
@@ -127,6 +129,10 @@ class Users {
 
             // generating token to access userData on other routes
             const token = jwt.sign(checkEmail, jwtKey)
+
+            // delete pwd form object
+            delete checkEmail['pwd'];
+
             // return data Object
             return response.status(200).json({
                 'status': true,

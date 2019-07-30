@@ -23,19 +23,18 @@ const isValidPhone = /^[0-9]{8,16}$/;
 class UserValidation {
     static userSignup(request, response, next) {
         /**
-         * @description Valdiate user signup details 
+         * @description Validate user signup details 
          * @param { Object } request contains the user details
          * @param { Object } response contains response sent to the user
          * @return { json }
          */
         const {
             firstName,
-            lastName,
+            lastName, middleName,
             email,
             pwd,
-            phone
         } = request.body;
-        if (Object.keys(request.body).length > 6) {
+        if (Object.keys(request.body).length == 5) {
             return response.status(400).json({
                 status: true,
                 data: '',

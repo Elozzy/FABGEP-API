@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import Cryptr from 'cryptr';
 const salt = bcrypt.genSaltSync(10);
-const cryptrKey = "$(88200819970317@CyberCopWithEndTOEndEncryptionModule)";
+const cryptrKey = "(88200819970317@CyberCop);;;;;;;;;;;";
 const cryptr = new Cryptr(cryptrKey);
 /**
  * @description Encrypt data and compare

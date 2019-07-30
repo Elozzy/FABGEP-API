@@ -38,8 +38,8 @@ function () {
   }
 
   (0, _createClass2["default"])(PurseValidator, null, [{
-    key: "getPurseAccount",
-    value: function getPurseAccount(request, response, next) {
+    key: "purse",
+    value: function purse(request, response, next) {
       var uid = request.query.uid;
 
       if (Object.keys(request.query).length > 1) {

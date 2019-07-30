@@ -36,7 +36,7 @@ function () {
     key: "userSignup",
     value: function userSignup(request, response, next) {
       /**
-       * @description Valdiate user signup details 
+       * @description Validate user signup details 
        * @param { Object } request contains the user details
        * @param { Object } response contains response sent to the user
        * @return { json }
@@ -44,11 +44,11 @@ function () {
       var _request$body = request.body,
           firstName = _request$body.firstName,
           lastName = _request$body.lastName,
+          middleName = _request$body.middleName,
           email = _request$body.email,
-          pwd = _request$body.pwd,
-          phone = _request$body.phone;
+          pwd = _request$body.pwd;
 
-      if (Object.keys(request.body).length > 6) {
+      if (Object.keys(request.body).length == 5) {
         return response.status(400).json({
           status: true,
           data: '',
