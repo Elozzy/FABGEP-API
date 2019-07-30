@@ -28,6 +28,8 @@ class Users {
 
             // set user unique identification number
             userData.uid = uuid();
+            // set timestamp
+            userData.timestamp = Date.now();
 
             // check if email is already in use by someone else
             const checkEmail = await MDBConnect.findOne('users', {
