@@ -9,7 +9,7 @@ The Kwara Food and Agricultural Business Growth Enhancement Program - KW-FABGEP 
 - /signup: create a new user account *
 - /login: authenticate existing user *
 - /user: fetch a existing user account data *
-- /purse: fetch a user account purse 
+- /purse: fetch a user account purse *
 - /updatePurse: update a user purse
 - /createInvestment: create a new investment package
 - /getPackages: fetch all available investment packages
