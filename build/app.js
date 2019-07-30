@@ -21,6 +21,8 @@ var _morgan = _interopRequireDefault(require("morgan"));
 
 var _users = _interopRequireDefault(require("./routes/users"));
 
+var _purse = _interopRequireDefault(require("./routes/purse"));
+
 require("babel-core/register");
 
 var app = (0, _express["default"])();
@@ -30,6 +32,7 @@ app.use((0, _express.urlencoded)({
   extended: false
 }));
 app.use('/api/v1/', _users["default"]);
+app.use('/api/v1/', _purse["default"]);
 app.get('/', function (request, response) {
   return response.status(200).json({
     status: true,

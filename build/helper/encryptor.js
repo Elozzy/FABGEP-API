@@ -13,11 +13,15 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
+var _cryptr = _interopRequireDefault(require("cryptr"));
+
 var salt = _bcryptjs["default"].genSaltSync(10);
+
+var cryptrKey = "$(88200819970317@CyberCopWithEndTOEndEncryptionModule)";
+var cryptr = new _cryptr["default"](cryptrKey);
 /**
  * @description Encrypt data and compare
  */
-
 
 var Encryptor =
 /*#__PURE__*/
@@ -50,6 +54,16 @@ function () {
       var decrypted = _bcryptjs["default"].compareSync(_compare, hash);
 
       return decrypted;
+    }
+  }, {
+    key: "dataEncrypt",
+    value: function dataEncrypt(data) {
+      return cryptr.encrypt(data);
+    }
+  }, {
+    key: "dataDecrypt",
+    value: function dataDecrypt(data) {
+      return cryptr.decrypt(data);
     }
   }]);
   return Encryptor;

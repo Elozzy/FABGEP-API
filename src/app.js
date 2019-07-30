@@ -7,6 +7,7 @@ import logger from 'morgan';
 
 
 import usersRouter from './routes/users';
+import purseRouter from './routes/purse';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 app.use('/api/v1/', usersRouter);
+app.use('/api/v1/', purseRouter);
 app.get('/', (request, response) => {
   return response.status(200).json({
     status: true, data: '',
