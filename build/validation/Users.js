@@ -40,19 +40,20 @@ function () {
        * @param { Object } request contains the user details
        * @param { Object } response contains response sent to the user
        * @return { json }
-       */
+      */
+      console.log(request.body);
       var _request$body = request.body,
           firstName = _request$body.firstName,
           lastName = _request$body.lastName,
-          middleName = _request$body.middleName,
           email = _request$body.email,
           pwd = _request$body.pwd;
+      console.log(Object.keys(request.body).length);
 
-      if (Object.keys(request.body).length == 5) {
+      if (Object.keys(request.body).length != 5) {
         return response.status(400).json({
           status: true,
           data: '',
-          message: 'Only First Name, Last Name, Email and Password is required'
+          message: 'Only First Name, Last Name, Middle name Email and Password is required'
         });
       }
 

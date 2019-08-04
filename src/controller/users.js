@@ -83,13 +83,17 @@ class Users {
                     'data': ''
                 })
             }
-
+            const getNewData = await MDBConnect.findOne('users', {
+                uid: userData.uid
+            });
             // generating token to access userData on other routes
             const token = jwt.sign({ uid: userData.uid, pwd: userData.pwd }, jwtKey);
             // return user token
             return response.status(201).json({
                 'status': true,
-                data: token,
+                data: {
+                    token, data: getNewData,
+                },
                 'message': `success`,
             });
 
@@ -108,10 +112,10 @@ class Users {
                 ...request.body
             };
             // check email
-            const checkEmail = await MDBConnect.findOne('users', {
+            const data = await MDBConnect.findOne('users', {
                 email: loginData.email
             });
-            if (!checkEmail) {
+            if (!data) {
                 return response.status(401).json({
                     'status': false,
                     'message': `Incorrect email address or password`
@@ -119,7 +123,7 @@ class Users {
             }
 
             // decrypt and compare password
-            const comparePassword = Encryptor.compare(loginData.pwd, checkEmail.pwd);
+            const comparePassword = Encryptor.compare(loginData.pwd, data.pwd);
             if (!comparePassword) {
                 return response.status(401).json({
                     'status': false,
@@ -128,15 +132,15 @@ class Users {
             }
 
             // generating token to access userData on other routes
-            const token = jwt.sign(checkEmail, jwtKey)
+            const token = jwt.sign(data, jwtKey)
 
             // delete pwd form object
-            delete checkEmail['pwd'];
+            delete data['pwd'];
 
             // return data Object
             return response.status(200).json({
                 'status': true,
-                data: { token, data: checkEmail },
+                data: { token, data: data },
 
                 'message': `Login was successful`,
             });

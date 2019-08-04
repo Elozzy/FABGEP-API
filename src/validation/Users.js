@@ -27,18 +27,20 @@ class UserValidation {
          * @param { Object } request contains the user details
          * @param { Object } response contains response sent to the user
          * @return { json }
-         */
+        */
+        console.log(request.body);
         const {
             firstName,
-            lastName, middleName,
+            lastName,
             email,
             pwd,
         } = request.body;
-        if (Object.keys(request.body).length == 5) {
+        console.log(Object.keys(request.body).length)
+        if (Object.keys(request.body).length != 5) {
             return response.status(400).json({
                 status: true,
                 data: '',
-                message: 'Only First Name, Last Name, Email and Password is required'
+                message: 'Only First Name, Last Name, Middle name Email and Password is required'
             });
         }
         if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(pwd) && isEmpty(phone)) {

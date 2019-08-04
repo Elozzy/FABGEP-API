@@ -94,7 +94,7 @@ function () {
       var _userSignup = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(request, response) {
-        var userData, checkEmail, encryptedPassword, purseNumber, purse, createUserAccount, createPurseAccount, token;
+        var userData, checkEmail, encryptedPassword, purseNumber, purse, createUserAccount, createPurseAccount, getNewData, token;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -185,6 +185,13 @@ function () {
                 }));
 
               case 28:
+                _context2.next = 30;
+                return _Mongodb["default"].findOne('users', {
+                  uid: userData.uid
+                });
+
+              case 30:
+                getNewData = _context2.sent;
                 // generating token to access userData on other routes
                 token = _jsonwebtoken["default"].sign({
                   uid: userData.uid,
@@ -193,12 +200,15 @@ function () {
 
                 return _context2.abrupt("return", response.status(201).json({
                   'status': true,
-                  data: token,
+                  data: {
+                    token: token,
+                    data: getNewData
+                  },
                   'message': "success"
                 }));
 
-              case 32:
-                _context2.prev = 32;
+              case 35:
+                _context2.prev = 35;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", response.status(500).json({
                   status: false,
@@ -206,12 +216,12 @@ function () {
                   'data': _context2.t0
                 }));
 
-              case 35:
+              case 38:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 32]]);
+        }, _callee2, null, [[0, 35]]);
       }));
 
       function userSignup(_x, _x2) {
@@ -226,7 +236,7 @@ function () {
       var _userLogin = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(request, response) {
-        var loginData, checkEmail, comparePassword, token;
+        var loginData, data, comparePassword, token;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -240,9 +250,9 @@ function () {
                 });
 
               case 4:
-                checkEmail = _context3.sent;
+                data = _context3.sent;
 
-                if (checkEmail) {
+                if (data) {
                   _context3.next = 7;
                   break;
                 }
@@ -254,7 +264,7 @@ function () {
 
               case 7:
                 // decrypt and compare password
-                comparePassword = _encryptor["default"].compare(loginData.pwd, checkEmail.pwd);
+                comparePassword = _encryptor["default"].compare(loginData.pwd, data.pwd);
 
                 if (comparePassword) {
                   _context3.next = 10;
@@ -268,15 +278,15 @@ function () {
 
               case 10:
                 // generating token to access userData on other routes
-                token = _jsonwebtoken["default"].sign(checkEmail, jwtKey); // delete pwd form object
+                token = _jsonwebtoken["default"].sign(data, jwtKey); // delete pwd form object
 
-                delete checkEmail['pwd']; // return data Object
+                delete data['pwd']; // return data Object
 
                 return _context3.abrupt("return", response.status(200).json({
                   'status': true,
                   data: {
                     token: token,
-                    data: checkEmail
+                    data: data
                   },
                   'message': "Login was successful"
                 }));

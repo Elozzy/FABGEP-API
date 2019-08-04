@@ -6,7 +6,7 @@ const router = Router();
 
 
 router.get('/purse', Validator.purse, Controller.purse);
-
+router.post('/transactions', Validator.transactions, Controller.transactions);
 
 
 export default router;

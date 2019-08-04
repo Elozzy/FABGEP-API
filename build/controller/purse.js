@@ -32,7 +32,7 @@ function () {
       var _purse = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee(request, response) {
-        var uid, account, secureData;
+        var uid, account;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -53,19 +53,19 @@ function () {
                     data: '',
                     message: 'document not found'
                   });
-                }
+                } // const secureData = Security.dataEncrypt(JSON.stringify(account));
 
-                secureData = _encryptor["default"].dataEncrypt(JSON.stringify(account));
+
                 response.status(200).json({
                   status: true,
-                  data: secureData,
+                  data: account,
                   message: 'success'
                 });
-                _context.next = 13;
+                _context.next = 12;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 9:
+                _context.prev = 9;
                 _context.t0 = _context["catch"](1);
                 response.status(500).json({
                   status: false,
@@ -73,12 +73,12 @@ function () {
                   message: 'error occurred'
                 });
 
-              case 13:
+              case 12:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[1, 10]]);
+        }, _callee, null, [[1, 9]]);
       }));
 
       function purse(_x, _x2) {
@@ -86,6 +86,63 @@ function () {
       }
 
       return purse;
+    }()
+  }, {
+    key: "transactions",
+    value: function () {
+      var _transactions = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee2(request, response) {
+        var _request$body, uid, limit, recentTransaction;
+
+        return _regenerator["default"].wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _request$body = request.body, uid = _request$body.uid, limit = _request$body.limit;
+                _context2.prev = 1;
+                _context2.next = 4;
+                return _Mongodb["default"].find('transaction', {
+                  uid: uid
+                }, limit);
+
+              case 4:
+                recentTransaction = _context2.sent;
+                console.log(recentTransaction);
+
+                if (!recentTransaction) {
+                  response.status(404).json({
+                    status: false,
+                    data: '',
+                    message: 'no document found'
+                  });
+                }
+
+                response.status(200).json({
+                  status: true,
+                  data: recentTransaction,
+                  message: 'success'
+                });
+                _context2.next = 12;
+                break;
+
+              case 10:
+                _context2.prev = 10;
+                _context2.t0 = _context2["catch"](1);
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[1, 10]]);
+      }));
+
+      function transactions(_x3, _x4) {
+        return _transactions.apply(this, arguments);
+      }
+
+      return transactions;
     }()
   }]);
   return Purse;
