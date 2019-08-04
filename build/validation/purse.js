@@ -13,6 +13,8 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
+var _util = require("util");
+
 /**
  * @description isEmpty check for empty input field
  * @return { boolean }
@@ -38,9 +40,11 @@ function () {
   }
 
   (0, _createClass2["default"])(PurseValidator, null, [{
-    key: "getPurseAccount",
-    value: function getPurseAccount(request, response, next) {
-      var uid = request.query.uid;
+    key: "purse",
+    value: function purse(request, response, next) {
+      var _request$query = request.query,
+          uid = _request$query.uid,
+          limit = _request$query.limit;
 
       if (Object.keys(request.query).length > 1) {
         response.status(400).json({
@@ -54,6 +58,37 @@ function () {
         response.status(400).json({
           status: false,
           message: 'empty request',
+          data: ''
+        });
+      }
+
+      next();
+    }
+  }, {
+    key: "transactions",
+    value: function transactions(request, response, next) {
+      var uid = request.body.uid;
+
+      if (Object.keys(request.body).length > 2) {
+        response.status(400).json({
+          status: false,
+          message: 'uid and limit is required',
+          data: ''
+        });
+      }
+
+      if (isEmpty(uid) || isEmpty(limit)) {
+        response.status(400).json({
+          status: false,
+          message: "uid and limit can't be left empty",
+          data: ''
+        });
+      }
+
+      if ((0, _util.isNumber)(limit)) {
+        response.status(400).json({
+          status: false,
+          message: "limit mush be an integer value",
           data: ''
         });
       }

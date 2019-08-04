@@ -1,3 +1,5 @@
+import { isNumber } from "util";
+
 /**
  * @description isEmpty check for empty input field
  * @return { boolean }
@@ -26,7 +28,7 @@ export default class PurseValidator {
 
 
     static purse(request, response, next) {
-        const { uid } = request.query;
+        const { uid, limit } = request.query;
 
         if (Object.keys(request.query).length > 1) {
             response.status(400).json({ status: false, message: 'less data required', data: '' });
@@ -39,6 +41,23 @@ export default class PurseValidator {
         next();
     }
 
+    static transactions(request, response, next) {
+        const { uid } = request.body;
 
+        if (Object.keys(request.body).length > 2) {
+            response.status(400).json({ status: false, message: 'uid and limit is required', data: '' })
+        }
+
+        if (isEmpty(uid) || isEmpty(limit)) {
+            response.status(400).json({ status: false, message: `uid and limit can't be left empty`, data: '' })
+        }
+
+        if (isNumber(limit)) {
+            response.status(400).json({ status: false, message: `limit mush be an integer value`, data: '' });
+        }
+
+        next();
+
+    }
 
 }

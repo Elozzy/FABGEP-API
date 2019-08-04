@@ -22,6 +22,16 @@ class MDBConnect {
         }
 
     }
+    static async findMany(collection, keyPair,limit ) {
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.find(collection,keyPair).limit(limit);
+            return result;
+        } catch (error) {
+            return error;
+        }
+
+    }
     static async insertOne(collection, query) {
         const c = await MDBConnect.connect(collection);
         const result = await c.insertOne(query);

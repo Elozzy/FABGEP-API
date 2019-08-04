@@ -109,46 +109,52 @@ function () {
       return findOne;
     }()
   }, {
-    key: "insertOne",
+    key: "findMany",
     value: function () {
-      var _insertOne = (0, _asyncToGenerator2["default"])(
+      var _findMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee3(collection, query) {
+      _regenerator["default"].mark(function _callee3(collection, keyPair, limit) {
         var c, result;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                _context3.prev = 0;
+                _context3.next = 3;
                 return MDBConnect.connect(collection);
 
-              case 2:
+              case 3:
                 c = _context3.sent;
-                _context3.next = 5;
-                return c.insertOne(query);
+                _context3.next = 6;
+                return c.find(collection, keyPair).limit(limit);
 
-              case 5:
+              case 6:
                 result = _context3.sent;
                 return _context3.abrupt("return", result);
 
-              case 7:
+              case 10:
+                _context3.prev = 10;
+                _context3.t0 = _context3["catch"](0);
+                return _context3.abrupt("return", _context3.t0);
+
+              case 13:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3);
+        }, _callee3, null, [[0, 10]]);
       }));
 
-      function insertOne(_x4, _x5) {
-        return _insertOne.apply(this, arguments);
+      function findMany(_x4, _x5, _x6) {
+        return _findMany.apply(this, arguments);
       }
 
-      return insertOne;
+      return findMany;
     }()
   }, {
-    key: "insertMany",
+    key: "insertOne",
     value: function () {
-      var _insertMany = (0, _asyncToGenerator2["default"])(
+      var _insertOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee4(collection, query) {
         var c, result;
@@ -162,7 +168,7 @@ function () {
               case 2:
                 c = _context4.sent;
                 _context4.next = 5;
-                return c.insertMany(query);
+                return c.insertOne(query);
 
               case 5:
                 result = _context4.sent;
@@ -176,18 +182,18 @@ function () {
         }, _callee4);
       }));
 
-      function insertMany(_x6, _x7) {
-        return _insertMany.apply(this, arguments);
+      function insertOne(_x7, _x8) {
+        return _insertOne.apply(this, arguments);
       }
 
-      return insertMany;
+      return insertOne;
     }()
   }, {
-    key: "updateOne",
+    key: "insertMany",
     value: function () {
-      var _updateOne = (0, _asyncToGenerator2["default"])(
+      var _insertMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee5(collection, keyPair, update) {
+      _regenerator["default"].mark(function _callee5(collection, query) {
         var c, result;
         return _regenerator["default"].wrap(function _callee5$(_context5) {
           while (1) {
@@ -199,9 +205,7 @@ function () {
               case 2:
                 c = _context5.sent;
                 _context5.next = 5;
-                return c.updateOne(keyPair, {
-                  $set: update
-                });
+                return c.insertMany(query);
 
               case 5:
                 result = _context5.sent;
@@ -215,18 +219,18 @@ function () {
         }, _callee5);
       }));
 
-      function updateOne(_x8, _x9, _x10) {
-        return _updateOne.apply(this, arguments);
+      function insertMany(_x9, _x10) {
+        return _insertMany.apply(this, arguments);
       }
 
-      return updateOne;
+      return insertMany;
     }()
   }, {
-    key: "findOneAndReplace",
+    key: "updateOne",
     value: function () {
-      var _findOneAndReplace = (0, _asyncToGenerator2["default"])(
+      var _updateOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee6(collection, keyPair, modification) {
+      _regenerator["default"].mark(function _callee6(collection, keyPair, update) {
         var c, result;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
@@ -238,9 +242,8 @@ function () {
               case 2:
                 c = _context6.sent;
                 _context6.next = 5;
-                return c.findOneAndReplace(keyPair, modification, {
-                  returnNewDocument: true,
-                  maxTimeMS: 10
+                return c.updateOne(keyPair, {
+                  $set: update
                 });
 
               case 5:
@@ -255,7 +258,47 @@ function () {
         }, _callee6);
       }));
 
-      function findOneAndReplace(_x11, _x12, _x13) {
+      function updateOne(_x11, _x12, _x13) {
+        return _updateOne.apply(this, arguments);
+      }
+
+      return updateOne;
+    }()
+  }, {
+    key: "findOneAndReplace",
+    value: function () {
+      var _findOneAndReplace = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee7(collection, keyPair, modification) {
+        var c, result;
+        return _regenerator["default"].wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return MDBConnect.connect(collection);
+
+              case 2:
+                c = _context7.sent;
+                _context7.next = 5;
+                return c.findOneAndReplace(keyPair, modification, {
+                  returnNewDocument: true,
+                  maxTimeMS: 10
+                });
+
+              case 5:
+                result = _context7.sent;
+                return _context7.abrupt("return", result);
+
+              case 7:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }));
+
+      function findOneAndReplace(_x14, _x15, _x16) {
         return _findOneAndReplace.apply(this, arguments);
       }
 

@@ -9,6 +9,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _ip = _interopRequireDefault(require("ip"));
+
 require("@babel/polyfill");
 
 var _httpErrors = _interopRequireDefault(require("http-errors"));
@@ -54,8 +56,11 @@ app.use(function (error, request, response, next) {
   });
 });
 var port = process.env.PORT || 5000;
-app.listen(port, function () {
-  console.log("Server Running:  ".concat(port));
+
+var host = process.env.IP || _ip["default"].address();
+
+app.listen(port, host, function () {
+  console.log("Server Running on host:".concat(host, " port: ").concat(port));
 });
 var _default = app;
 exports["default"] = _default;

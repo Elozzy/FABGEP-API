@@ -3,7 +3,7 @@ import MDBConnect from '../database/Mongodb';
 
 import Encryptor from '../helper/encryptor';
 import uuid from 'uuid/v4';
-const jwtKey = "(88200819970317@CyberCop)";
+const jwtKey = "(88200819970317@CyberCop);;;;;;;;;;;";
 class Users {
 
     static async  generateNumber() {
@@ -28,6 +28,8 @@ class Users {
 
             // set user unique identification number
             userData.uid = uuid();
+            // set timestamp
+            userData.timestamp = Date.now();
 
             // check if email is already in use by someone else
             const checkEmail = await MDBConnect.findOne('users', {
@@ -53,6 +55,8 @@ class Users {
                 number: purseNumber,
                 balance: 0.0,
                 bonusBalance: 0.0,
+                bonusLock: true,
+                purseLock: false,
                 purseOwner: userData.uid,
                 createTimestamp: Date.now(),
                 lastUpdateTimestamp: Date.now()
@@ -79,13 +83,17 @@ class Users {
                     'data': ''
                 })
             }
-
+            const getNewData = await MDBConnect.findOne('users', {
+                uid: userData.uid
+            });
             // generating token to access userData on other routes
             const token = jwt.sign({ uid: userData.uid, pwd: userData.pwd }, jwtKey);
             // return user token
             return response.status(201).json({
                 'status': true,
-                data: token,
+                data: {
+                    token, data: getNewData,
+                },
                 'message': `success`,
             });
 
@@ -104,10 +112,10 @@ class Users {
                 ...request.body
             };
             // check email
-            const checkEmail = await MDBConnect.findOne('users', {
+            const data = await MDBConnect.findOne('users', {
                 email: loginData.email
             });
-            if (!checkEmail) {
+            if (!data) {
                 return response.status(401).json({
                     'status': false,
                     'message': `Incorrect email address or password`
@@ -115,7 +123,7 @@ class Users {
             }
 
             // decrypt and compare password
-            const comparePassword = Encryptor.compare(loginData.pwd, checkEmail.pwd);
+            const comparePassword = Encryptor.compare(loginData.pwd, data.pwd);
             if (!comparePassword) {
                 return response.status(401).json({
                     'status': false,
@@ -124,11 +132,15 @@ class Users {
             }
 
             // generating token to access userData on other routes
-            const token = jwt.sign(checkEmail, jwtKey)
+            const token = jwt.sign(data, jwtKey)
+
+            // delete pwd form object
+            delete data['pwd'];
+
             // return data Object
             return response.status(200).json({
                 'status': true,
-                data: { token, data: checkEmail },
+                data: { token, data: data },
 
                 'message': `Login was successful`,
             });

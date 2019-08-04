@@ -17,7 +17,7 @@ var _cryptr = _interopRequireDefault(require("cryptr"));
 
 var salt = _bcryptjs["default"].genSaltSync(10);
 
-var cryptrKey = "$(88200819970317@CyberCopWithEndTOEndEncryptionModule)";
+var cryptrKey = "(88200819970317@CyberCop);;;;;;;;;;;";
 var cryptr = new _cryptr["default"](cryptrKey);
 /**
  * @description Encrypt data and compare
