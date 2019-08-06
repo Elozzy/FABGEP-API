@@ -9,6 +9,7 @@ import logger from 'morgan';
 
 import usersRouter from './routes/users';
 import purseRouter from './routes/purse';
+import notification from './routes/notification';
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(urlencoded({ extended: false }));
 
 app.use('/api/v1/', usersRouter);
 app.use('/api/v1/', purseRouter);
+app.use('/api/v1/', notification);
+
+
 app.get('/', (request, response) => {
   return response.status(200).json({
     status: true, data: '',
@@ -35,7 +39,7 @@ app.use((error, request, response, next) => {
   console.log(error);
   response.status(error.status || 500).json({
     status: false, data: error,
-    message: 'Service not available'
+    message: error.message || 'Service not available'
   })
 });
 const port = process.env.PORT || 5000;

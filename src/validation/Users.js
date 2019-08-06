@@ -39,21 +39,21 @@ class UserValidation {
         console.log(Object.keys(request.body).length)
         if (Object.keys(request.body).length != 6) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Only First Name, Last Name, Middle name Email Password and Pin is required'
             });
         }
         if (isEmpty(firstName) && isEmpty(lastName) && isEmpty(email) && isEmpty(pwd) && isEmpty(phone)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'First Name, Last Name, Email, Password and Phone number field are required'
             });
         }
         if (isEmpty(firstName)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'First name is required'
             })
@@ -74,7 +74,7 @@ class UserValidation {
         }
         if (isEmpty(lastName)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Last name is required'
             })
@@ -95,7 +95,7 @@ class UserValidation {
         }
         if (isEmpty(pwd)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Password is required'
             })
@@ -109,7 +109,7 @@ class UserValidation {
         }
         if (isEmpty(pin)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Pin is required'
             })
@@ -123,7 +123,7 @@ class UserValidation {
         // }
         if (isEmpty(email)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Email is required'
             })
@@ -137,7 +137,7 @@ class UserValidation {
         }
         // if(isEmpty(phone)){
         //     return response.status(400).json({
-        //         status: true,data: '',
+        //         status: false,data: '',
         //         message: 'Phone number is required'
         //     })
         // }
@@ -150,7 +150,7 @@ class UserValidation {
         // if(!isBoolean.test(isAdmin)){
         //     return response.status(422).json({
         //         status: false,data:'',
-        //         message: 'Invalid input, isAdmin can only be true or false'
+        //         message: 'Invalid input, isAdmin can only be false or false'
         //     })
         // }
         next();
@@ -164,14 +164,14 @@ class UserValidation {
         } = request.body;
         if (Object.keys(request.body).length > 2) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Only Email and Password is required'
             });
         }
         if (isEmpty(email)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Email is required'
             })
@@ -185,7 +185,7 @@ class UserValidation {
         }
         if (isEmpty(pwd)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Password is required'
             })
@@ -203,14 +203,14 @@ class UserValidation {
         const { uid } = request.query;
         if (Object.keys(request.query).length > 1) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'Only uid required'
             });
         }
         if (isEmpty(uid)) {
             return response.status(400).json({
-                status: true,
+                status: false,
                 data: '',
                 message: 'uid is required'
             })

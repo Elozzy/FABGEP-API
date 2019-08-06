@@ -25,6 +25,8 @@ var _users = _interopRequireDefault(require("./routes/users"));
 
 var _purse = _interopRequireDefault(require("./routes/purse"));
 
+var _notification = _interopRequireDefault(require("./routes/notification"));
+
 require("babel-core/register");
 
 var app = (0, _express["default"])();
@@ -35,6 +37,7 @@ app.use((0, _express.urlencoded)({
 }));
 app.use('/api/v1/', _users["default"]);
 app.use('/api/v1/', _purse["default"]);
+app.use('/api/v1/', _notification["default"]);
 app.get('/', function (request, response) {
   return response.status(200).json({
     status: true,
@@ -52,7 +55,7 @@ app.use(function (error, request, response, next) {
   response.status(error.status || 500).json({
     status: false,
     data: error,
-    message: 'Service not available'
+    message: error.message || 'Service not available'
   });
 });
 var port = process.env.PORT || 5000;

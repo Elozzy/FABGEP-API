@@ -49,7 +49,7 @@ function () {
               case 7:
                 _context.prev = 7;
                 _context.t0 = _context["catch"](0);
-                console.error(_context.t0);
+                console.log(_context.t0);
                 console.log(_context.t0);
 
               case 11:
@@ -93,7 +93,7 @@ function () {
               case 10:
                 _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
-                console.error(_context2.t0);
+                console.log(_context2.t0);
                 return _context2.abrupt("return", _context2.t0);
 
               case 14:
@@ -128,7 +128,7 @@ function () {
               case 3:
                 c = _context3.sent;
                 _context3.next = 6;
-                return c.find(collection, keyPair).limit(limit);
+                return c.find(keyPair).limit(limit).toArray();
 
               case 6:
                 result = _context3.sent;
@@ -137,7 +137,7 @@ function () {
               case 10:
                 _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
-                console.error(_context3.t0);
+                console.log(_context3.t0);
                 return _context3.abrupt("return", _context3.t0);
 
               case 14:
@@ -181,7 +181,7 @@ function () {
               case 10:
                 _context4.prev = 10;
                 _context4.t0 = _context4["catch"](0);
-                console.error(_context4.t0);
+                console.log(_context4.t0);
                 return _context4.abrupt("return", _context4.t0);
 
               case 14:
@@ -225,7 +225,7 @@ function () {
               case 10:
                 _context5.prev = 10;
                 _context5.t0 = _context5["catch"](0);
-                console.error(_context5.t0);
+                console.log(_context5.t0);
                 return _context5.abrupt("return", _context5.t0);
 
               case 14:
@@ -271,7 +271,7 @@ function () {
               case 10:
                 _context6.prev = 10;
                 _context6.t0 = _context6["catch"](0);
-                console.error(_context6.t0);
+                console.log(_context6.t0);
                 return _context6.abrupt("return", _context6.t0);
 
               case 14:
@@ -318,7 +318,7 @@ function () {
               case 10:
                 _context7.prev = 10;
                 _context7.t0 = _context7["catch"](0);
-                console.error(_context7.t0);
+                console.log(_context7.t0);
                 return _context7.abrupt("return", _context7.t0);
 
               case 14:
@@ -334,6 +334,92 @@ function () {
       }
 
       return findOneAndReplace;
+    }()
+  }, {
+    key: "deleteOne",
+    value: function () {
+      var _deleteOne = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee8(collection, keyPair) {
+        var c, result;
+        return _regenerator["default"].wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.prev = 0;
+                _context8.next = 3;
+                return MDBConnect.connect(collection);
+
+              case 3:
+                c = _context8.sent;
+                _context8.next = 6;
+                return c.deleteOne(keyPair);
+
+              case 6:
+                result = _context8.sent;
+                return _context8.abrupt("return", result);
+
+              case 10:
+                _context8.prev = 10;
+                _context8.t0 = _context8["catch"](0);
+
+              case 12:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8, null, [[0, 10]]);
+      }));
+
+      function deleteOne(_x17, _x18) {
+        return _deleteOne.apply(this, arguments);
+      }
+
+      return deleteOne;
+    }()
+  }, {
+    key: "deleteMany",
+    value: function () {
+      var _deleteMany = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee9(collection, keyPair) {
+        var col, result;
+        return _regenerator["default"].wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.prev = 0;
+                _context9.next = 3;
+                return MDBConnect.connect(collection);
+
+              case 3:
+                col = _context9.sent;
+                _context9.next = 6;
+                return col.deleteMany(keyPair);
+
+              case 6:
+                result = _context9.sent;
+                return _context9.abrupt("return", result);
+
+              case 10:
+                _context9.prev = 10;
+                _context9.t0 = _context9["catch"](0);
+                console.log(_context9.t0);
+                return _context9.abrupt("return", _context9.t0);
+
+              case 14:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, null, [[0, 10]]);
+      }));
+
+      function deleteMany(_x19, _x20) {
+        return _deleteMany.apply(this, arguments);
+      }
+
+      return deleteMany;
     }()
   }]);
   return MDBConnect;
