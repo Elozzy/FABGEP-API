@@ -21,6 +21,7 @@ var isIntegar = /^(?:[1-9]\d*|\d)$/;
 var isValidAlphabet = /^[a-zA-Z ]*$/;
 var isValidName = /^[a-zA-Z]{3,15}$/;
 var isValidPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+var isValidPin = /^[0-9]{4,4}$/;
 var whiteSpace = /\s/g;
 var isBoolean = /^(true|false|1|0)$/;
 var isValidPhone = /^[0-9]{8,16}$/;
@@ -46,14 +47,15 @@ function () {
           firstName = _request$body.firstName,
           lastName = _request$body.lastName,
           email = _request$body.email,
-          pwd = _request$body.pwd;
+          pwd = _request$body.pwd,
+          pin = _request$body.pin;
       console.log(Object.keys(request.body).length);
 
-      if (Object.keys(request.body).length != 5) {
+      if (Object.keys(request.body).length != 6) {
         return response.status(400).json({
           status: true,
           data: '',
-          message: 'Only First Name, Last Name, Middle name Email and Password is required'
+          message: 'Only First Name, Last Name, Middle name Email Password and Pin is required'
         });
       }
 
@@ -128,6 +130,21 @@ function () {
           message: 'Password should contain minimum eight characters, at least one letter and one number:'
         });
       }
+
+      if (isEmpty(pin)) {
+        return response.status(400).json({
+          status: true,
+          data: '',
+          message: 'Pin is required'
+        });
+      } // if (!isValidPin.test(pin)) {
+      //     return response.status(422).json({
+      //         status: false,
+      //         data: '',
+      //         message: 'Pin should contain four numbers only'
+      //     })
+      // }
+
 
       if (isEmpty(email)) {
         return response.status(400).json({
