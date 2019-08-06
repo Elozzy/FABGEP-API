@@ -13,7 +13,7 @@ export default class Purse {
         try {
 
             const account = await MDBConnect.findOne('account', { purseOwner: uid });
-
+            print(account);
             if (!account) {
                 response.status(404).json({ status: false, data: '', message: 'document not found' });
             }
@@ -42,15 +42,15 @@ export default class Purse {
             if (!newTransaction) {
                 response.status(404).json({ status: false, data: '', message: 'no document found', });
             }
-           const sent= await  Notification.notify({
+            const sent = await Notification.notify({
                 "uid": transaction.uid,
                 "title": transaction.title,
                 "desc": transaction.desc,
                 "type": transaction.status ? 'danger' : 'info',
                 "seen": false,
                 "timeStamp": Date.now()
-           });
-            
+            });
+
             response.status(200).json({ status: true, data: recentTransaction, message: 'success' });
         } catch (err) {
             response.status(500).json({ status: false, data: error, message: 'error occurred' });
