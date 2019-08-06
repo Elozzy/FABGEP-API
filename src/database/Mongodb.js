@@ -9,6 +9,8 @@ class MDBConnect {
             return client.db(db).collection(collection);
         }
         catch (err) {
+            console.error(err);
+
             console.log(err);
         }
     }
@@ -18,39 +20,66 @@ class MDBConnect {
             const result = await c.findOne(keyPair);
             return result;
         } catch (error) {
+            console.error(error);
+
             return error;
         }
 
     }
-    static async findMany(collection, keyPair,limit ) {
+    static async findMany(collection, keyPair, limit) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.find(collection,keyPair).limit(limit);
+            const result = await c.find(collection, keyPair).limit(limit);
             return result;
         } catch (error) {
+            console.error(error);
             return error;
         }
 
     }
     static async insertOne(collection, query) {
-        const c = await MDBConnect.connect(collection);
-        const result = await c.insertOne(query);
-        return result;
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.insertOne(query);
+            return result;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+
     }
     static async insertMany(collection, query) {
-        const c = await MDBConnect.connect(collection);
-        const result = await c.insertMany(query);
-        return result;
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.insertMany(query);
+            return result;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+
     }
     static async updateOne(collection, keyPair, update) {
-        const c = await MDBConnect.connect(collection);
-        const result = await c.updateOne(keyPair, { $set: update });
-        return result;
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.updateOne(keyPair, { $set: update });
+            return result;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+
     }
     static async findOneAndReplace(collection, keyPair, modification) {
-        const c = await MDBConnect.connect(collection);
-        const result = await c.findOneAndReplace(keyPair, modification, { returnNewDocument: true, maxTimeMS: 10 });
-        return result;
+        try {
+            const c = await MDBConnect.connect(collection);
+            const result = await c.findOneAndReplace(keyPair, modification, { returnNewDocument: true, maxTimeMS: 10 });
+            return result;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+
     }
 }
 export default MDBConnect;
