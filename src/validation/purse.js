@@ -28,7 +28,7 @@ export default class PurseValidator {
 
 
     static purse(request, response, next) {
-        const { uid, limit } = request.query;
+        const { uid } = request.query;
 
         if (Object.keys(request.query).length > 1) {
             response.status(400).json({ status: false, message: 'less data required', data: '' });

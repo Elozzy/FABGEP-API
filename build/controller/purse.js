@@ -40,15 +40,15 @@ function () {
             switch (_context.prev = _context.next) {
               case 0:
                 uid = request.query.uid;
-                _context.prev = 1;
-                _context.next = 4;
+                console.log(uid);
+                _context.prev = 2;
+                _context.next = 5;
                 return _Mongodb["default"].findOne('account', {
                   purseOwner: uid
                 });
 
-              case 4:
+              case 5:
                 account = _context.sent;
-                print(account);
 
                 if (!account) {
                   response.status(404).json({
@@ -64,24 +64,25 @@ function () {
                   data: account,
                   message: 'success'
                 });
-                _context.next = 13;
+                _context.next = 14;
                 break;
 
               case 10:
                 _context.prev = 10;
-                _context.t0 = _context["catch"](1);
+                _context.t0 = _context["catch"](2);
+                console.log(_context.t0);
                 response.status(500).json({
                   status: false,
                   data: _context.t0,
                   message: 'error occurred'
                 });
 
-              case 13:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[1, 10]]);
+        }, _callee, null, [[2, 10]]);
       }));
 
       function purse(_x, _x2) {
@@ -149,7 +150,7 @@ function () {
                 _context2.t0 = _context2["catch"](1);
                 response.status(500).json({
                   status: false,
-                  data: error,
+                  data: _context2.t0,
                   message: 'error occurred'
                 });
 
@@ -211,7 +212,7 @@ function () {
                 _context3.t0 = _context3["catch"](1);
                 response.status(500).json({
                   status: false,
-                  data: error,
+                  data: _context3.t0,
                   message: 'error occurred'
                 });
 

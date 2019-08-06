@@ -42,9 +42,7 @@ function () {
   (0, _createClass2["default"])(PurseValidator, null, [{
     key: "purse",
     value: function purse(request, response, next) {
-      var _request$query = request.query,
-          uid = _request$query.uid,
-          limit = _request$query.limit;
+      var uid = request.query.uid;
 
       if (Object.keys(request.query).length > 1) {
         response.status(400).json({
