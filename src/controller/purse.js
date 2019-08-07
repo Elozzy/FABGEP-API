@@ -49,7 +49,7 @@ export default class Purse {
                 "desc": transaction.desc,
                 "type": transaction.status ? 'danger' : 'info',
                 "seen": false,
-                "timeStamp": Date.now()
+                "timestamp": Date.now()
             });
 
             response.status(200).json({ status: true, data: recentTransaction, message: 'success' });
@@ -76,5 +76,6 @@ export default class Purse {
 
 
 
+    
 
 }

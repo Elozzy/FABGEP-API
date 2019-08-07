@@ -58,8 +58,8 @@ class Users {
                 bonusLock: true,
                 purseLock: false,
                 purseOwner: userData.uid,
-                createTimestamp: Date.now(),
-                lastUpdateTimestamp: Date.now()
+                timestamp: Date.now(),
+                
             }
 
             // storing user account into the database
