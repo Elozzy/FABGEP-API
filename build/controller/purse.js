@@ -132,7 +132,7 @@ function () {
                   "desc": transaction.desc,
                   "type": transaction.status ? 'danger' : 'info',
                   "seen": false,
-                  "timeStamp": Date.now()
+                  "timestamp": Date.now()
                 });
 
               case 9:

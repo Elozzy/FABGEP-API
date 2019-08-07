@@ -143,8 +143,7 @@ function () {
                   bonusLock: true,
                   purseLock: false,
                   purseOwner: userData.uid,
-                  createTimestamp: Date.now(),
-                  lastUpdateTimestamp: Date.now() // storing user account into the database
+                  timestamp: Date.now() // storing user account into the database
 
                 };
                 _context2.next = 18;

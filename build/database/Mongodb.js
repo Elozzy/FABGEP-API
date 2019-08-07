@@ -7,6 +7,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
@@ -17,8 +21,12 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _mongodb = require("mongodb");
 
-var CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority";
-var db = 'KW-FABGEP';
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+var CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.gcp.mongodb.net/test?retryWrites=true&w=majority";
+var db = 'FABGEP';
 
 var MDBConnect =
 /*#__PURE__*/
@@ -172,7 +180,9 @@ function () {
               case 3:
                 c = _context4.sent;
                 _context4.next = 6;
-                return c.insertOne(query);
+                return c.insertOne(_objectSpread({}, query, {}, {
+                  lastModified: Date.now()
+                }));
 
               case 6:
                 result = _context4.sent;
@@ -209,31 +219,39 @@ function () {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _context5.prev = 0;
-                _context5.next = 3;
+                try {
+                  query = (0, _toConsumableArray2["default"])(query).map(function (e) {
+                    return _objectSpread({}, e, {}, {
+                      lastModified: Date.now()
+                    });
+                  });
+                } catch (error) {}
+
+                _context5.prev = 1;
+                _context5.next = 4;
                 return MDBConnect.connect(collection);
 
-              case 3:
+              case 4:
                 c = _context5.sent;
-                _context5.next = 6;
+                _context5.next = 7;
                 return c.insertMany(query);
 
-              case 6:
+              case 7:
                 result = _context5.sent;
                 return _context5.abrupt("return", result);
 
-              case 10:
-                _context5.prev = 10;
-                _context5.t0 = _context5["catch"](0);
+              case 11:
+                _context5.prev = 11;
+                _context5.t0 = _context5["catch"](1);
                 console.log(_context5.t0);
                 return _context5.abrupt("return", _context5.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[0, 10]]);
+        }, _callee5, null, [[1, 11]]);
       }));
 
       function insertMany(_x9, _x10) {
@@ -261,7 +279,10 @@ function () {
                 c = _context6.sent;
                 _context6.next = 6;
                 return c.updateOne(keyPair, {
-                  $set: update
+                  $set: update,
+                  $currentDate: {
+                    lastModified: true
+                  }
                 });
 
               case 6:
@@ -289,51 +310,58 @@ function () {
       return updateOne;
     }()
   }, {
-    key: "findOneAndReplace",
+    key: "updateMany",
     value: function () {
-      var _findOneAndReplace = (0, _asyncToGenerator2["default"])(
+      var _updateMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee7(collection, keyPair, modification) {
+      _regenerator["default"].mark(function _callee7(collection, keyPair, update) {
         var c, result;
         return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.prev = 0;
-                _context7.next = 3;
+                try {
+                  update = (0, _toConsumableArray2["default"])(update).map(function (e) {
+                    return _objectSpread({}, e, {}, {
+                      lastModified: Date.now()
+                    });
+                  });
+                } catch (error) {}
+
+                _context7.prev = 1;
+                _context7.next = 4;
                 return MDBConnect.connect(collection);
 
-              case 3:
+              case 4:
                 c = _context7.sent;
-                _context7.next = 6;
-                return c.findOneAndReplace(keyPair, modification, {
-                  returnNewDocument: true,
-                  maxTimeMS: 10
+                _context7.next = 7;
+                return c.updateMany(keyPair, {
+                  $set: update
                 });
 
-              case 6:
+              case 7:
                 result = _context7.sent;
                 return _context7.abrupt("return", result);
 
-              case 10:
-                _context7.prev = 10;
-                _context7.t0 = _context7["catch"](0);
+              case 11:
+                _context7.prev = 11;
+                _context7.t0 = _context7["catch"](1);
                 console.log(_context7.t0);
                 return _context7.abrupt("return", _context7.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, null, [[0, 10]]);
+        }, _callee7, null, [[1, 11]]);
       }));
 
-      function findOneAndReplace(_x14, _x15, _x16) {
-        return _findOneAndReplace.apply(this, arguments);
+      function updateMany(_x14, _x15, _x16) {
+        return _updateMany.apply(this, arguments);
       }
 
-      return findOneAndReplace;
+      return updateMany;
     }()
   }, {
     key: "deleteOne",
