@@ -59,7 +59,7 @@ class Users {
                 purseLock: false,
                 purseOwner: userData.uid,
                 timestamp: Date.now(),
-                
+
             }
 
             // storing user account into the database
@@ -87,7 +87,12 @@ class Users {
                 uid: userData.uid
             });
             // generating token to access userData on other routes
-            const token = jwt.sign({ uid: userData.uid, pwd: userData.pwd }, jwtKey);
+            const token = jwt.sign({ uid: userData.uid, pwd: userData.pwd, pin: userData.pin }, jwtKey, { expiresIn: '24h' });
+
+            // delete sensitive information form object
+            delete getNewData['pwd'];
+            delete getNewData['pin'];
+
             // return user token
             return response.status(201).json({
                 'status': true,
@@ -134,8 +139,9 @@ class Users {
             // generating token to access userData on other routes
             const token = jwt.sign(data, jwtKey)
 
-            // delete pwd form object
+            // delete sensitive information form object
             delete data['pwd'];
+            delete data['pin'];
 
             // return data Object
             return response.status(200).json({
@@ -154,31 +160,7 @@ class Users {
         }
 
     }
-    static async userProfile(request, response) {
-        try {
-            const { uid } = request.query;
-            const data = await MDBConnect.findOne('users', { uid });
-            if (!data) {
-                return response.status(404).json({
-                    status: false,
-                    message: 'no document found',
-                    'data': data
-                })
-            }
-            return response.status(200).json({
-                'status': true,
-                data,
 
-                'message': `document found`,
-            });
-        } catch (error) {
-            return response.status(500).json({
-                status: false,
-                message: 'error occurred',
-                'data': error
-            })
-        }
-    }
 }
 
 export default Users;
