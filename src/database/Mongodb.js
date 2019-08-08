@@ -72,7 +72,7 @@ class MDBConnect {
     static async updateOne(collection, keyPair, update) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.updateOne(keyPair, { $set: update, $currentDate: { lastModified: true } });
+            const result = await c.updateOne(keyPair, { ...update, $currentDate: { lastModified: true } });
             return result;
         } catch (error) {
             console.log(error);
@@ -92,7 +92,7 @@ class MDBConnect {
         }
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.updateMany(keyPair, { $set: update });
+            const result = await c.updateMany(keyPair, update);
             return result;
         } catch (error) {
             console.log(error);
