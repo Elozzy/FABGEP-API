@@ -5,20 +5,23 @@ import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import { join } from 'path';
 import logger from 'morgan';
+import useragent from 'express-useragent';
 
 
+import Authentication from './helper/authentication';
 import usersRouter from './routes/users';
 import purseRouter from './routes/purse';
 import notification from './routes/notification';
 
 const app = express();
 
-
+app.use(useragent.express());
 app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 
 app.use('/api/v1/', usersRouter);
+app.use(Authentication.isAuthenticated);
 app.use('/api/v1/', purseRouter);
 app.use('/api/v1/', notification);
 

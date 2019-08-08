@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
-const CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.mongodb.net/test?retryWrites=true&w=majority";
-const db = 'KW-FABGEP';
+const CONNECTION_URL = "mongodb+srv://dev:Password1@cluster001-i6loe.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const db = 'FABGEP';
 
 class MDBConnect {
     static async connect(collection) {
@@ -41,7 +41,7 @@ class MDBConnect {
     static async insertOne(collection, query) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.insertOne(query);
+            const result = await c.insertOne({ ...query, ...{ lastModified: Date.now() } });
             return result;
         } catch (error) {
             console.log(error);
@@ -50,6 +50,15 @@ class MDBConnect {
 
     }
     static async insertMany(collection, query) {
+        try {
+            query = [...query].map((e) => {
+                return {
+                    ...e, ...{ lastModified: Date.now() }
+                };
+            });
+        } catch (error) {
+
+        }
         try {
             const c = await MDBConnect.connect(collection);
             const result = await c.insertMany(query);
@@ -63,7 +72,7 @@ class MDBConnect {
     static async updateOne(collection, keyPair, update) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.updateOne(keyPair, { $set: update });
+            const result = await c.updateOne(keyPair, { ...update, $currentDate: { lastModified: true } });
             return result;
         } catch (error) {
             console.log(error);
@@ -71,10 +80,19 @@ class MDBConnect {
         }
 
     }
-    static async findOneAndReplace(collection, keyPair, modification) {
+    static async updateMany(collection, keyPair, update) {
+        try {
+            update = [...update].map((e) => {
+                return {
+                    ...e, ...{ lastModified: Date.now() }
+                };
+            });
+        } catch (error) {
+
+        }
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.findOneAndReplace(keyPair, modification, { returnNewDocument: true, maxTimeMS: 10 });
+            const result = await c.updateMany(keyPair, update);
             return result;
         } catch (error) {
             console.log(error);

@@ -37,7 +37,7 @@ class UserValidation {
             pwd, pin,
         } = request.body;
         console.log(Object.keys(request.body).length)
-        if (Object.keys(request.body).length != 6) {
+        if (Object.keys(request.body).length > 7) {
             return response.status(400).json({
                 status: false,
                 data: '',
@@ -199,24 +199,7 @@ class UserValidation {
         }
         next();
     }
-    static userProfile(request, response, next) {
-        const { uid } = request.query;
-        if (Object.keys(request.query).length > 1) {
-            return response.status(400).json({
-                status: false,
-                data: '',
-                message: 'Only uid required'
-            });
-        }
-        if (isEmpty(uid)) {
-            return response.status(400).json({
-                status: false,
-                data: '',
-                message: 'uid is required'
-            })
-        }
-        next();
-    }
+
 }
 
 module.exports = UserValidation;

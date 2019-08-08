@@ -21,6 +21,10 @@ var _path = require("path");
 
 var _morgan = _interopRequireDefault(require("morgan"));
 
+var _expressUseragent = _interopRequireDefault(require("express-useragent"));
+
+var _authentication = _interopRequireDefault(require("./helper/authentication"));
+
 var _users = _interopRequireDefault(require("./routes/users"));
 
 var _purse = _interopRequireDefault(require("./routes/purse"));
@@ -30,12 +34,14 @@ var _notification = _interopRequireDefault(require("./routes/notification"));
 require("babel-core/register");
 
 var app = (0, _express["default"])();
+app.use(_expressUseragent["default"].express());
 app.use((0, _morgan["default"])('dev'));
 app.use((0, _express.json)());
 app.use((0, _express.urlencoded)({
   extended: false
 }));
 app.use('/api/v1/', _users["default"]);
+app.use(_authentication["default"].isAuthenticated);
 app.use('/api/v1/', _purse["default"]);
 app.use('/api/v1/', _notification["default"]);
 app.get('/', function (request, response) {
