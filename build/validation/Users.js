@@ -51,7 +51,7 @@ function () {
           pin = _request$body.pin;
       console.log(Object.keys(request.body).length);
 
-      if (Object.keys(request.body).length != 6) {
+      if (Object.keys(request.body).length > 7) {
         return response.status(400).json({
           status: false,
           data: '',
@@ -226,29 +226,6 @@ function () {
           status: false,
           data: '',
           message: 'Password should contain minimum eight characters, at least one letter and one number:'
-        });
-      }
-
-      next();
-    }
-  }, {
-    key: "userProfile",
-    value: function userProfile(request, response, next) {
-      var uid = request.query.uid;
-
-      if (Object.keys(request.query).length > 1) {
-        return response.status(400).json({
-          status: false,
-          data: '',
-          message: 'Only uid required'
-        });
-      }
-
-      if (isEmpty(uid)) {
-        return response.status(400).json({
-          status: false,
-          data: '',
-          message: 'uid is required'
         });
       }
 

@@ -278,12 +278,11 @@ function () {
               case 3:
                 c = _context6.sent;
                 _context6.next = 6;
-                return c.updateOne(keyPair, {
-                  $set: update,
+                return c.updateOne(keyPair, _objectSpread({}, update, {
                   $currentDate: {
                     lastModified: true
                   }
-                });
+                }));
 
               case 6:
                 result = _context6.sent;
@@ -335,9 +334,7 @@ function () {
               case 4:
                 c = _context7.sent;
                 _context7.next = 7;
-                return c.updateMany(keyPair, {
-                  $set: update
-                });
+                return c.updateMany(keyPair, update);
 
               case 7:
                 result = _context7.sent;

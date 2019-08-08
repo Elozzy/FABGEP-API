@@ -194,8 +194,14 @@ function () {
                 // generating token to access userData on other routes
                 token = _jsonwebtoken["default"].sign({
                   uid: userData.uid,
-                  pwd: userData.pwd
-                }, jwtKey); // return user token
+                  pwd: userData.pwd,
+                  pin: userData.pin
+                }, jwtKey, {
+                  expiresIn: '24h'
+                }); // delete sensitive information form object
+
+                delete getNewData['pwd'];
+                delete getNewData['pin']; // return user token
 
                 return _context2.abrupt("return", response.status(201).json({
                   'status': true,
@@ -206,8 +212,8 @@ function () {
                   'message': "success"
                 }));
 
-              case 35:
-                _context2.prev = 35;
+              case 37:
+                _context2.prev = 37;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", response.status(500).json({
                   status: false,
@@ -215,12 +221,12 @@ function () {
                   'data': _context2.t0
                 }));
 
-              case 38:
+              case 40:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 35]]);
+        }, _callee2, null, [[0, 37]]);
       }));
 
       function userSignup(_x, _x2) {
@@ -277,9 +283,10 @@ function () {
 
               case 10:
                 // generating token to access userData on other routes
-                token = _jsonwebtoken["default"].sign(data, jwtKey); // delete pwd form object
+                token = _jsonwebtoken["default"].sign(data, jwtKey); // delete sensitive information form object
 
-                delete data['pwd']; // return data Object
+                delete data['pwd'];
+                delete data['pin']; // return data Object
 
                 return _context3.abrupt("return", response.status(200).json({
                   'status': true,
@@ -290,8 +297,8 @@ function () {
                   'message': "Login was successful"
                 }));
 
-              case 15:
-                _context3.prev = 15;
+              case 16:
+                _context3.prev = 16;
                 _context3.t0 = _context3["catch"](0);
                 return _context3.abrupt("return", response.status(500).json({
                   status: false,
@@ -299,12 +306,12 @@ function () {
                   'data': _context3.t0
                 }));
 
-              case 18:
+              case 19:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 15]]);
+        }, _callee3, null, [[0, 16]]);
       }));
 
       function userLogin(_x3, _x4) {
@@ -312,68 +319,6 @@ function () {
       }
 
       return userLogin;
-    }()
-  }, {
-    key: "userProfile",
-    value: function () {
-      var _userProfile = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee4(request, response) {
-        var uid, data;
-        return _regenerator["default"].wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.prev = 0;
-                uid = request.query.uid;
-                _context4.next = 4;
-                return _Mongodb["default"].findOne('users', {
-                  uid: uid
-                });
-
-              case 4:
-                data = _context4.sent;
-
-                if (data) {
-                  _context4.next = 7;
-                  break;
-                }
-
-                return _context4.abrupt("return", response.status(404).json({
-                  status: false,
-                  message: 'no document found',
-                  'data': data
-                }));
-
-              case 7:
-                return _context4.abrupt("return", response.status(200).json({
-                  'status': true,
-                  data: data,
-                  'message': "document found"
-                }));
-
-              case 10:
-                _context4.prev = 10;
-                _context4.t0 = _context4["catch"](0);
-                return _context4.abrupt("return", response.status(500).json({
-                  status: false,
-                  message: 'error occurred',
-                  'data': _context4.t0
-                }));
-
-              case 13:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, null, [[0, 10]]);
-      }));
-
-      function userProfile(_x5, _x6) {
-        return _userProfile.apply(this, arguments);
-      }
-
-      return userProfile;
     }()
   }]);
   return Users;
