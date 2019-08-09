@@ -21,17 +21,18 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 app.use('/api/v1/', usersRouter);
-app.use(Authentication.isAuthenticated);
-app.use('/api/v1/', purseRouter);
-app.use('/api/v1/', notification);
-
-
 app.get('/', (request, response) => {
   return response.status(200).json({
     status: true, data: '',
     message: 'Welcome to Foodmoni API'
   })
 })
+app.use(Authentication.isAuthenticated);
+app.use('/api/v1/', purseRouter);
+app.use('/api/v1/', notification);
+
+
+
 // catch 404 and forward to error handler
 app.use((request, response, next) => {
   next(createError(404));

@@ -345,13 +345,13 @@ function () {
       var _transfer = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee6(request, response) {
-        var _request$body2, amount, toAccount, senderData, senderPurse, receiverData, receiverPurse, transactionRefId, ip, senderTransaction, receiverTransaction, createTransaction, failed, log, _failed, updateSenderPurseAccount, _failed2, updateReceiverPurseAccount, _failed3, updateTransaction, _failed4, senderNotification, receiverNotification, sendNotification;
+        var _request$body2, amount, toAccount, purpose, senderData, senderPurse, receiverData, receiverPurse, transactionRefId, ip, senderTransaction, receiverTransaction, createTransaction, failed, log, _failed, updateSenderPurseAccount, _failed2, updateReceiverPurseAccount, _failed3, updateTransaction, _failed4, senderNotification, receiverNotification, sendNotification;
 
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _request$body2 = request.body, amount = _request$body2.amount, toAccount = _request$body2.toAccount;
+                _request$body2 = request.body, amount = _request$body2.amount, toAccount = _request$body2.toAccount, purpose = _request$body2.purpose;
                 console.log(request.body); // Fetch sender data
 
                 senderData = request.userData;
@@ -462,7 +462,7 @@ function () {
                   currency: 'USD',
                   status: 'P',
                   title: 'Transfer',
-                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, ")"),
+                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
                     ip: ip,
@@ -479,7 +479,7 @@ function () {
                   currency: 'USD',
                   status: 'P',
                   title: 'Transfer',
-                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, ")"),
+                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
                     ip: ip,
@@ -650,7 +650,7 @@ function () {
                 receiverNotification = {
                   uid: receiverData.uid,
                   title: "Credit Alert",
-                  desc: "Your purse has been credited with ".concat(amount, " from ").concat(senderData, " xxxxxx").concat(senderData.purseNumber.toString().substr(6, 10), " ref: ").concat(transactionRefId, " ").concat(new Date().toLocaleDateString()),
+                  desc: "Your purse has been credited with ".concat(amount, " from ").concat(senderData, " xxxxxx").concat(senderData.purseNumber.toString().substr(6, 10), " ref: ").concat(transactionRefId, ". ").concat(purpose, " ").concat(new Date().toLocaleDateString()),
                   type: 'success',
                   seen: false,
                   timestamp: Date.now()

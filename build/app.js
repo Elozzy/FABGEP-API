@@ -41,16 +41,16 @@ app.use((0, _express.urlencoded)({
   extended: false
 }));
 app.use('/api/v1/', _users["default"]);
-app.use(_authentication["default"].isAuthenticated);
-app.use('/api/v1/', _purse["default"]);
-app.use('/api/v1/', _notification["default"]);
 app.get('/', function (request, response) {
   return response.status(200).json({
     status: true,
     data: '',
     message: 'Welcome to Foodmoni API'
   });
-}); // catch 404 and forward to error handler
+});
+app.use(_authentication["default"].isAuthenticated);
+app.use('/api/v1/', _purse["default"]);
+app.use('/api/v1/', _notification["default"]); // catch 404 and forward to error handler
 
 app.use(function (request, response, next) {
   next((0, _httpErrors["default"])(404));

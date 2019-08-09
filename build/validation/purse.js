@@ -118,7 +118,7 @@ function () {
           amount = _request$body.amount,
           toAccount = _request$body.toAccount;
 
-      if (Object.keys(request.body).length > 2) {
+      if (Object.keys(request.body).length > 3) {
         return response.status(400).json({
           status: false,
           message: 'less data required',
@@ -130,6 +130,14 @@ function () {
         return response.status(400).json({
           status: false,
           message: 'amount and to account is required',
+          data: ''
+        });
+      }
+
+      if (Number(amount) < 0) {
+        return response.status(400).json({
+          status: false,
+          message: 'amount is invalid',
           data: ''
         });
       }
@@ -148,8 +156,10 @@ function () {
           message: 'invalid account number',
           data: ''
         });
-      }
+      } // parse amount to valid number
 
+
+      request.body.amount = Number(amount);
       next();
     }
   }]);
