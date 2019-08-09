@@ -112,7 +112,7 @@ export default class Purse {
         return e;
     }
     static async transfer(request, response) {
-        const { amount, toAccount } = request.body;
+        const { amount, toAccount, purpose } = request.body;
         console.log(request.body);
 
         // Fetch sender data
@@ -177,7 +177,7 @@ export default class Purse {
             currency: 'USD',
             status: 'P',
             title: 'Transfer',
-            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount})`, timestamp: Date.now(),
+            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: ip, useragent: request.useragent },
         };
         const receiverTransaction = {
@@ -190,7 +190,7 @@ export default class Purse {
             currency: 'USD',
             status: 'P',
             title: 'Transfer',
-            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount})`, timestamp: Date.now(),
+            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: ip, useragent: request.useragent },
         };
 
@@ -256,7 +256,7 @@ export default class Purse {
         const receiverNotification = {
             uid: receiverData.uid,
             title: "Credit Alert",
-            desc: `Your purse has been credited with ${amount} from ${senderData} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId} ${new Date().toLocaleDateString()}`,
+            desc: `Your purse has been credited with ${amount} from ${senderData} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId}. ${purpose} ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
