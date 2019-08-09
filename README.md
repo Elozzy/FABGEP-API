@@ -1,26 +1,28 @@
 # FABGEP-API
+
 The Kwara Food and Agricultural Business Growth Enhancement Program - KW-FABGEP is a Private - Public partnership initiative designed to drive development in the food and agricultural sector, primarily through education to ensure growth and sustainable development in the state
 
+## List of End-Points
 
-## List of End-Points 
+###### End point with " \* " signifies completion
 
- ###### End point with " * " signifies completion 
-
-- /signup: create a new user account *
-- /login: authenticate existing user *
-- /user: fetch a existing user account data *
-- /purse: fetch a user account purse *
-- /updatePurse: update a user purse
+- /signup: create a new user account \*
+- /login: authenticate existing user \*
+- /user: fetch a existing user account data \*
+- /purse: fetch a user account purse \*
+- /notification: post a new notification \*
+- /notifications: fetch all user notification \*
+- /transactions: fetch all user transaction's \*
+- /transfer: send money from user to another purse account \*
 - /createInvestment: create a new investment package
 - /getPackages: fetch all available investment packages
 - /getUserInvestment: fetch a investment package of a user
 - /getAllUserInvestment: fetch all user investment packages
 - /addCard: add a new card details to user account
-- /getCard: fetch a user card details 
-
-
+- /getCard: fetch a user card details
 
 ### Standard API response format
+
 ```
 {
 "status": [boolean] - Only true if the details provided could be processed and no error occured while processing,
