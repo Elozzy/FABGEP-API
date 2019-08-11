@@ -112,12 +112,21 @@ export default class Purse {
         return e;
     }
     static async transfer(request, response) {
-        const { amount, toAccount, purpose } = request.body;
+        const { amount, toAccount, purpose, pin } = request.body;
         console.log(request.body);
 
         // Fetch sender data
         const senderData = request.userData;
         console.log(senderData);
+
+
+        // validate sender pin
+        if (pin != senderData.pin) {
+            if (!senderPurse) {
+                console.log('invalid pin number');
+                return response.status(400).json({ data: '', status: false, message: 'invalid pin number' });
+            }
+        }
 
         // Fetch sender purse account
         const senderPurse = await MDBConnect.findOne('account', { purseOwner: senderData.uid, number: senderData.purseNumber });
@@ -125,6 +134,7 @@ export default class Purse {
             console.log('invalid account number');
             return response.status(404).json({ data: '', status: false, message: 'invalid account number' });
         }
+
         console.log(senderPurse);
 
 
@@ -237,7 +247,7 @@ export default class Purse {
         const senderNotification = [{
             uid: senderData.uid,
             title: "Debit Alert",
-            desc: `Your purse xxxxxx${senderData.purseNumber.toString().substr(6, 10)} has been debited ${amount} ref: ${transactionRefId} ${new Date().toLocaleDateString()}`,
+            desc: `Your purse xxxxxx${senderData.purseNumber.toString().substr(6, 10)} has been debited ${amount} ref: ${transactionRefId} Date: ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
@@ -245,7 +255,7 @@ export default class Purse {
         {
             uid: senderData.uid,
             title: "Transaction Successfully",
-            desc: `${amount} has been successfully sent to purse xxxxxx${toAccount.toString().substr(6, 10)} ref: ${transactionRefId} ${new Date().toLocaleDateString()}`,
+            desc: `${amount} has been successfully sent to purse xxxxxx${toAccount.toString().substr(6, 10)} ref: ${transactionRefId} Date: ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
@@ -256,7 +266,7 @@ export default class Purse {
         const receiverNotification = {
             uid: receiverData.uid,
             title: "Credit Alert",
-            desc: `Your purse has been credited with ${amount} from ${senderData} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId}. ${purpose} ${new Date().toLocaleDateString()}`,
+            desc: `Your purse has been credited with ${amount} from ${senderData} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId}. ${purpose} Date: ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
@@ -268,7 +278,7 @@ export default class Purse {
             console.log('unable to send notification');
         }
 
-        return response.status(200).json({ data: true, status: true, message: "Transfer Successfully" });
+        return response.status(200).json({ data: senderTransaction, status: true, message: "Transfer Successfully" });
 
 
     }

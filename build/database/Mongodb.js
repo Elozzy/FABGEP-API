@@ -52,7 +52,10 @@ function () {
 
               case 3:
                 client = _context.sent;
-                return _context.abrupt("return", client.db(db).collection(collection));
+                return _context.abrupt("return", {
+                  client: client,
+                  db: client.db(db).collection(collection)
+                });
 
               case 7:
                 _context.prev = 7;
@@ -80,7 +83,8 @@ function () {
       var _findOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(collection, keyPair) {
-        var c, result;
+        var _c, result;
+
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -90,26 +94,29 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 3:
-                c = _context2.sent;
+                _c = _context2.sent;
                 _context2.next = 6;
-                return c.findOne(keyPair);
+                return _c.db.findOne(keyPair);
 
               case 6:
                 result = _context2.sent;
+
+                _c.client.close();
+
                 return _context2.abrupt("return", result);
 
-              case 10:
-                _context2.prev = 10;
+              case 11:
+                _context2.prev = 11;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
                 return _context2.abrupt("return", _context2.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 10]]);
+        }, _callee2, null, [[0, 11]]);
       }));
 
       function findOne(_x2, _x3) {
@@ -124,7 +131,8 @@ function () {
       var _findMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(collection, keyPair, limit) {
-        var c, result;
+        var _c2, result;
+
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -134,26 +142,29 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 3:
-                c = _context3.sent;
+                _c2 = _context3.sent;
                 _context3.next = 6;
-                return c.find(keyPair).limit(limit).toArray();
+                return _c2.db.find(keyPair).limit(limit).toArray();
 
               case 6:
                 result = _context3.sent;
+
+                _c2.client.close();
+
                 return _context3.abrupt("return", result);
 
-              case 10:
-                _context3.prev = 10;
+              case 11:
+                _context3.prev = 11;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
                 return _context3.abrupt("return", _context3.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 10]]);
+        }, _callee3, null, [[0, 11]]);
       }));
 
       function findMany(_x4, _x5, _x6) {
@@ -168,7 +179,8 @@ function () {
       var _insertOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee4(collection, query) {
-        var c, result;
+        var _c3, result;
+
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -178,28 +190,31 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 3:
-                c = _context4.sent;
+                _c3 = _context4.sent;
                 _context4.next = 6;
-                return c.insertOne(_objectSpread({}, query, {}, {
+                return _c3.db.insertOne(_objectSpread({}, query, {}, {
                   lastModified: Date.now()
                 }));
 
               case 6:
                 result = _context4.sent;
+
+                _c3.client.close();
+
                 return _context4.abrupt("return", result);
 
-              case 10:
-                _context4.prev = 10;
+              case 11:
+                _context4.prev = 11;
                 _context4.t0 = _context4["catch"](0);
                 console.log(_context4.t0);
                 return _context4.abrupt("return", _context4.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[0, 10]]);
+        }, _callee4, null, [[0, 11]]);
       }));
 
       function insertOne(_x7, _x8) {
@@ -214,7 +229,8 @@ function () {
       var _insertMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee5(collection, query) {
-        var c, result;
+        var _c4, result;
+
         return _regenerator["default"].wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -232,26 +248,29 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 4:
-                c = _context5.sent;
+                _c4 = _context5.sent;
                 _context5.next = 7;
-                return c.insertMany(query);
+                return _c4.db.insertMany(query);
 
               case 7:
                 result = _context5.sent;
+
+                _c4.client.close();
+
                 return _context5.abrupt("return", result);
 
-              case 11:
-                _context5.prev = 11;
+              case 12:
+                _context5.prev = 12;
                 _context5.t0 = _context5["catch"](1);
                 console.log(_context5.t0);
                 return _context5.abrupt("return", _context5.t0);
 
-              case 15:
+              case 16:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[1, 11]]);
+        }, _callee5, null, [[1, 12]]);
       }));
 
       function insertMany(_x9, _x10) {
@@ -266,7 +285,8 @@ function () {
       var _updateOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee6(collection, keyPair, update) {
-        var c, result;
+        var _c5, result;
+
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -276,9 +296,9 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 3:
-                c = _context6.sent;
+                _c5 = _context6.sent;
                 _context6.next = 6;
-                return c.updateOne(keyPair, _objectSpread({}, update, {
+                return _c5.db.updateOne(keyPair, _objectSpread({}, update, {
                   $currentDate: {
                     lastModified: true
                   }
@@ -286,20 +306,23 @@ function () {
 
               case 6:
                 result = _context6.sent;
+
+                _c5.client.close();
+
                 return _context6.abrupt("return", result);
 
-              case 10:
-                _context6.prev = 10;
+              case 11:
+                _context6.prev = 11;
                 _context6.t0 = _context6["catch"](0);
                 console.log(_context6.t0);
                 return _context6.abrupt("return", _context6.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, null, [[0, 10]]);
+        }, _callee6, null, [[0, 11]]);
       }));
 
       function updateOne(_x11, _x12, _x13) {
@@ -314,7 +337,8 @@ function () {
       var _updateMany = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee7(collection, keyPair, update) {
-        var c, result;
+        var _c6, result;
+
         return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -332,26 +356,29 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 4:
-                c = _context7.sent;
+                _c6 = _context7.sent;
                 _context7.next = 7;
-                return c.updateMany(keyPair, update);
+                return _c6.db.updateMany(keyPair, update);
 
               case 7:
                 result = _context7.sent;
+
+                _c6.client.close();
+
                 return _context7.abrupt("return", result);
 
-              case 11:
-                _context7.prev = 11;
+              case 12:
+                _context7.prev = 12;
                 _context7.t0 = _context7["catch"](1);
                 console.log(_context7.t0);
                 return _context7.abrupt("return", _context7.t0);
 
-              case 15:
+              case 16:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, null, [[1, 11]]);
+        }, _callee7, null, [[1, 12]]);
       }));
 
       function updateMany(_x14, _x15, _x16) {
@@ -366,7 +393,8 @@ function () {
       var _deleteOne = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee8(collection, keyPair) {
-        var c, result;
+        var _c7, result;
+
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
@@ -376,24 +404,27 @@ function () {
                 return MDBConnect.connect(collection);
 
               case 3:
-                c = _context8.sent;
+                _c7 = _context8.sent;
                 _context8.next = 6;
-                return c.deleteOne(keyPair);
+                return _c7.db.deleteOne(keyPair);
 
               case 6:
                 result = _context8.sent;
+
+                _c7.client.close();
+
                 return _context8.abrupt("return", result);
 
-              case 10:
-                _context8.prev = 10;
+              case 11:
+                _context8.prev = 11;
                 _context8.t0 = _context8["catch"](0);
 
-              case 12:
+              case 13:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, null, [[0, 10]]);
+        }, _callee8, null, [[0, 11]]);
       }));
 
       function deleteOne(_x17, _x18) {
@@ -424,20 +455,21 @@ function () {
 
               case 6:
                 result = _context9.sent;
+                c.client.close();
                 return _context9.abrupt("return", result);
 
-              case 10:
-                _context9.prev = 10;
+              case 11:
+                _context9.prev = 11;
                 _context9.t0 = _context9["catch"](0);
                 console.log(_context9.t0);
                 return _context9.abrupt("return", _context9.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9, null, [[0, 10]]);
+        }, _callee9, null, [[0, 11]]);
       }));
 
       function deleteMany(_x19, _x20) {

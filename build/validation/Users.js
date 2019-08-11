@@ -87,7 +87,7 @@ function () {
         return response.status(422).json({
           status: false,
           data: '',
-          message: 'First name should not contain spaces and be less than 3 or more than 15'
+          message: 'First name should not contain spaces and mush be more than 3 and less than 15 characters'
         });
       }
 
@@ -111,7 +111,7 @@ function () {
         return response.status(422).json({
           status: false,
           data: '',
-          message: 'Last name should not contain spaces be less than 3 or greater than 15'
+          message: 'Last name should not contain spaces and mush be more than 3 and less than 15 characters'
         });
       }
 

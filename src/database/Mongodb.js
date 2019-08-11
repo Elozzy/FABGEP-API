@@ -6,7 +6,7 @@ class MDBConnect {
     static async connect(collection) {
         try {
             const client = await MongoClient.connect(CONNECTION_URL);
-            return client.db(db).collection(collection);
+            return { client, db: client.db(db).collection(collection) };
         }
         catch (err) {
             console.log(err);
@@ -17,7 +17,8 @@ class MDBConnect {
     static async findOne(collection, keyPair, ) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.findOne(keyPair);
+            const result = await c.db.findOne(keyPair);
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -29,7 +30,8 @@ class MDBConnect {
     static async findMany(collection, keyPair, limit) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.find(keyPair).limit(limit).toArray();
+            const result = await c.db.find(keyPair).limit(limit).toArray();
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -41,7 +43,8 @@ class MDBConnect {
     static async insertOne(collection, query) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.insertOne({ ...query, ...{ lastModified: Date.now() } });
+            const result = await c.db.insertOne({ ...query, ...{ lastModified: Date.now() } });
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -61,7 +64,8 @@ class MDBConnect {
         }
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.insertMany(query);
+            const result = await c.db.insertMany(query);
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -72,7 +76,8 @@ class MDBConnect {
     static async updateOne(collection, keyPair, update) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.updateOne(keyPair, { ...update, $currentDate: { lastModified: true } });
+            const result = await c.db.updateOne(keyPair, { ...update, $currentDate: { lastModified: true } });
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -92,7 +97,8 @@ class MDBConnect {
         }
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.updateMany(keyPair, update);
+            const result = await c.db.updateMany(keyPair, update);
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);
@@ -103,7 +109,8 @@ class MDBConnect {
     static async deleteOne(collection, keyPair) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.deleteOne(keyPair);
+            const result = await c.db.deleteOne(keyPair);
+            c.client.close();
             return result;
         } catch (error) {
 
@@ -114,6 +121,7 @@ class MDBConnect {
         try {
             const col = await MDBConnect.connect(collection);
             const result = await col.deleteMany(keyPair);
+            c.client.close();
             return result;
         } catch (error) {
             console.log(error);

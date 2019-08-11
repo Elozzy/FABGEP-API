@@ -78,14 +78,14 @@ export default class PurseValidator {
     }
 
     static transfer(request, response, next) {
-        const { amount, toAccount, } = request.body;
+        const { amount, toAccount, pin, purpose } = request.body;
 
-        if (Object.keys(request.body).length > 3) {
+        if (Object.keys(request.body).length > 4) {
             return response.status(400).json({ status: false, message: 'less data required', data: '' });
         }
 
-        if (isEmpty(amount) || isEmpty(toAccount)) {
-            return response.status(400).json({ status: false, message: 'amount and to account is required', data: '' });
+        if (isEmpty(amount) || isEmpty(toAccount) || isEmpty(pin) || isEmpty(purpose)) {
+            return response.status(400).json({ status: false, message: 'amount,pin, purpose  and to account is required', data: '' });
         }
 
         if (Number(amount) < 0) {
@@ -101,6 +101,7 @@ export default class PurseValidator {
 
         // parse amount to valid number
         request.body.amount = Number(amount);
+        console.log(request.body);
 
         next();
     }

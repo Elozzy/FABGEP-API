@@ -116,9 +116,11 @@ function () {
     value: function transfer(request, response, next) {
       var _request$body = request.body,
           amount = _request$body.amount,
-          toAccount = _request$body.toAccount;
+          toAccount = _request$body.toAccount,
+          pin = _request$body.pin,
+          purpose = _request$body.purpose;
 
-      if (Object.keys(request.body).length > 3) {
+      if (Object.keys(request.body).length > 4) {
         return response.status(400).json({
           status: false,
           message: 'less data required',
@@ -126,10 +128,10 @@ function () {
         });
       }
 
-      if (isEmpty(amount) || isEmpty(toAccount)) {
+      if (isEmpty(amount) || isEmpty(toAccount) || isEmpty(pin) || isEmpty(purpose)) {
         return response.status(400).json({
           status: false,
-          message: 'amount and to account is required',
+          message: 'amount,pin, purpose  and to account is required',
           data: ''
         });
       }
@@ -160,6 +162,7 @@ function () {
 
 
       request.body.amount = Number(amount);
+      console.log(request.body);
       next();
     }
   }]);
