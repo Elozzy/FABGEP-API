@@ -182,12 +182,14 @@ export default class Purse {
             type: 'TRANSFER',
             from: senderData.purseNumber,
             to: toAccount,
+            fromAccountName: `${senderData.firstName} ${senderData.lastName}`,
+            toAccountName: `${receiverData.firstName} ${receiverData.lastName}`,
             uid: senderData.uid,
             amount: amount,
             currency: 'USD',
             status: 'P',
             title: 'Transfer',
-            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
+            desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: ip, useragent: request.useragent },
         };
         const receiverTransaction = {
@@ -195,12 +197,14 @@ export default class Purse {
             type: 'TRANSFER',
             from: senderData.purseNumber,
             to: toAccount,
+            fromAccountName: `${senderData.firstName} ${senderData.lastName}`,
+            toAccountName: `${receiverData.firstName} ${receiverData.lastName}`,
             uid: receiverData.uid,
             amount: amount,
             currency: 'USD',
             status: 'P',
             title: 'Transfer',
-            desc: `Transferred ${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
+            desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: ip, useragent: request.useragent },
         };
 
@@ -266,7 +270,7 @@ export default class Purse {
         const receiverNotification = {
             uid: receiverData.uid,
             title: "Credit Alert",
-            desc: `Your purse has been credited with ${amount} from ${senderData} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId}. ${purpose} Date: ${new Date().toLocaleDateString()}`,
+            desc: `Your purse has been credited with ${amount} from ${senderData.firstName} ${senderData.lastName} xxxxxx${senderData.purseNumber.toString().substr(6, 10)} ref: ${transactionRefId}. Purpose: ${purpose} Date: ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
@@ -278,7 +282,7 @@ export default class Purse {
             console.log('unable to send notification');
         }
 
-        return response.status(200).json({ data: senderTransaction, status: true, message: "Transfer Successfully" });
+        return response.status(200).json({ data: { ...senderTransaction, status: 'A' }, status: true, message: "Transfer Successfully" });
 
 
     }

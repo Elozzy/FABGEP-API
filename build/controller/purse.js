@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
@@ -22,6 +24,10 @@ var _encryptor = _interopRequireDefault(require("../helper/encryptor"));
 var _notifiaction = _interopRequireDefault(require("../controller/notifiaction"));
 
 var _v = _interopRequireDefault(require("uuid/v4"));
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var Purse =
 /*#__PURE__*/
@@ -475,12 +481,14 @@ function () {
                   type: 'TRANSFER',
                   from: senderData.purseNumber,
                   to: toAccount,
+                  fromAccountName: "".concat(senderData.firstName, " ").concat(senderData.lastName),
+                  toAccountName: "".concat(receiverData.firstName, " ").concat(receiverData.lastName),
                   uid: senderData.uid,
                   amount: amount,
                   currency: 'USD',
                   status: 'P',
                   title: 'Transfer',
-                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
+                  desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
                     ip: ip,
@@ -492,12 +500,14 @@ function () {
                   type: 'TRANSFER',
                   from: senderData.purseNumber,
                   to: toAccount,
+                  fromAccountName: "".concat(senderData.firstName, " ").concat(senderData.lastName),
+                  toAccountName: "".concat(receiverData.firstName, " ").concat(receiverData.lastName),
                   uid: receiverData.uid,
                   amount: amount,
                   currency: 'USD',
                   status: 'P',
                   title: 'Transfer',
-                  desc: "Transferred ".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
+                  desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
                     ip: ip,
@@ -668,7 +678,7 @@ function () {
                 receiverNotification = {
                   uid: receiverData.uid,
                   title: "Credit Alert",
-                  desc: "Your purse has been credited with ".concat(amount, " from ").concat(senderData, " xxxxxx").concat(senderData.purseNumber.toString().substr(6, 10), " ref: ").concat(transactionRefId, ". ").concat(purpose, " Date: ").concat(new Date().toLocaleDateString()),
+                  desc: "Your purse has been credited with ".concat(amount, " from ").concat(senderData.firstName, " ").concat(senderData.lastName, " xxxxxx").concat(senderData.purseNumber.toString().substr(6, 10), " ref: ").concat(transactionRefId, ". Purpose: ").concat(purpose, " Date: ").concat(new Date().toLocaleDateString()),
                   type: 'success',
                   seen: false,
                   timestamp: Date.now()
@@ -684,7 +694,9 @@ function () {
                 }
 
                 return _context6.abrupt("return", response.status(200).json({
-                  data: senderTransaction,
+                  data: _objectSpread({}, senderTransaction, {
+                    status: 'A'
+                  }),
                   status: true,
                   message: "Transfer Successfully"
                 }));
