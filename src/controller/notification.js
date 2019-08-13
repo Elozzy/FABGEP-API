@@ -52,6 +52,20 @@ export default class Notification {
         }
     }
 
+    static async seenNotifications(request, response) {
+        try {
+            const { uid } = request.userData;
 
+            const data = await MDBConnect.updateMany('notification', { uid }, { $set: { seen: true } });
+
+            if (!data) {
+                response.status(500).json({ status: false, data: data, message: 'error updating notifications' });
+            }
+            response.status(200).json({ status: true, data: {}, message: 'success' });
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ status: false, data: error, message: 'error updating notifications' });
+        }
+    }
 
 }
