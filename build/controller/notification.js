@@ -244,6 +244,71 @@ function () {
 
       return deleteNotification;
     }()
+  }, {
+    key: "seenNotifications",
+    value: function () {
+      var _seenNotifications = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee5(request, response) {
+        var uid, data;
+        return _regenerator["default"].wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
+                uid = request.userData.uid;
+                _context5.next = 4;
+                return _Mongodb["default"].updateMany('notification', {
+                  uid: uid
+                }, {
+                  $set: {
+                    seen: true
+                  }
+                });
+
+              case 4:
+                data = _context5.sent;
+
+                if (!data) {
+                  response.status(500).json({
+                    status: false,
+                    data: data,
+                    message: 'error updating notifications'
+                  });
+                }
+
+                response.status(200).json({
+                  status: true,
+                  data: {},
+                  message: 'success'
+                });
+                _context5.next = 13;
+                break;
+
+              case 9:
+                _context5.prev = 9;
+                _context5.t0 = _context5["catch"](0);
+                console.log(_context5.t0);
+                response.status(500).json({
+                  status: false,
+                  data: _context5.t0,
+                  message: 'error updating notifications'
+                });
+
+              case 13:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, null, [[0, 9]]);
+      }));
+
+      function seenNotifications(_x6, _x7) {
+        return _seenNotifications.apply(this, arguments);
+      }
+
+      return seenNotifications;
+    }()
   }]);
   return Notification;
 }();
