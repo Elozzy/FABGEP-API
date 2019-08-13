@@ -259,7 +259,8 @@ function () {
                 uid = request.userData.uid;
                 _context5.next = 4;
                 return _Mongodb["default"].updateMany('notification', {
-                  uid: uid
+                  uid: uid,
+                  seen: false
                 }, {
                   $set: {
                     seen: true
