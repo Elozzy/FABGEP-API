@@ -18,7 +18,9 @@ router.get('/user', _purse2["default"].userProfile, _purse["default"].userProfil
 router.get('/purse', _purse2["default"].purse, _purse["default"].purse);
 router.post('/transactions', _purse2["default"].transactions, _purse["default"].transactions);
 router.post('/transfer', _purse2["default"].transfer, _purse["default"].transfer);
-router.post('/initTransaction', _purse["default"].initTransaction); // router.post('/deposit', Validator.deposit, Controller.deposit);
+router.post('/initTransaction', _purse["default"].initTransaction);
+router.post('/deposit', _purse2["default"].deposit, _purse["default"].deposit);
+router.get('/exchangeRate', _purse2["default"].exchangeRate, _purse["default"].exchangeRate); // router.post('/deposit', Validator.deposit, Controller.deposit);
 
 var _default = router;
 exports["default"] = _default;

@@ -111,6 +111,19 @@ export default class Purse {
         const e = await MDBConnect.insertOne('collection', payload);
         return e;
     }
+
+    static async onDepositFailed(transaction) {
+        const payload = {
+            uid: senderData.uid,
+            title: "Transaction Failed",
+            desc: `Your transfer of ${amount} to purse ${toAccount} has failed contact support for more information ref: ${transactionRefId} ${new Date().toLocaleDateString()}`,
+            type: 'danger',
+            seen: false,
+            timestamp: Date.now()
+        };
+        const e = await MDBConnect.insertOne('collection', payload);
+        return e;
+    }
     static async transfer(request, response) {
         const { amount, toAccount, purpose, pin } = request.body;
         console.log(request.body);
@@ -176,6 +189,7 @@ export default class Purse {
             amount: amount,
             currency: 'USD',
             status: 'P',
+            method: 'Transfer',
             title: 'Transfer',
             desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: Purse.getIp(), useragent: request.useragent },
@@ -191,6 +205,7 @@ export default class Purse {
             amount: amount,
             currency: 'USD',
             status: 'P',
+            method: 'Transfer',
             title: 'Transfer',
             desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
             metadata: { ip: Purse.getIp(), useragent: request.useragent },
@@ -198,7 +213,7 @@ export default class Purse {
 
         const createTransaction = await MDBConnect.insertMany('transaction', [senderTransaction, receiverTransaction]);
         if (!createTransaction) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            const failed = await Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
             console.log('unable to initiate transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to initiate transaction' });
         }
@@ -206,7 +221,7 @@ export default class Purse {
         // log sender and receiver purse snapshot
         const log = await MDBConnect.insertMany('purseSnapshot', [{ ref: transactionRefId, senderPurse: senderPurse, receiverPurse: receiverPurse }]);
         if (!log) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            const failed = await Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
             console.log('unable to initiate transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to initiate transaction' });
         }
@@ -214,7 +229,7 @@ export default class Purse {
         // deduct from sender account
         const updateSenderPurseAccount = await MDBConnect.updateOne('account', { number: senderData.purseNumber, purseOwner: senderData.uid }, { '$inc': { balance: -amount } })
         if (!updateSenderPurseAccount) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            const failed = await Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
             console.log('unable to process transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to process transaction' });
         }
@@ -222,7 +237,7 @@ export default class Purse {
         // increase receiver account
         const updateReceiverPurseAccount = await MDBConnect.updateOne('account', { number: toAccount, purseOwner: receiverData.uid }, { '$inc': { balance: amount } });
         if (!updateReceiverPurseAccount) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            const failed = await Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
             console.log('unable to process transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to process transaction' });
         }
@@ -230,7 +245,7 @@ export default class Purse {
         // update transaction record
         const updateTransaction = await MDBConnect.updateMany('transaction', { ref: transactionRefId, }, { '$set': { status: 'S' } });
         if (!updateTransaction) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            const failed = await Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
             console.log('unable to update transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to update transaction' });
         }
@@ -274,9 +289,7 @@ export default class Purse {
 
 
     }
-    static async deposit(request, response) {
 
-    }
 
     static async initTransaction(request, response) {
 
@@ -301,13 +314,11 @@ export default class Purse {
 
         // error should occurred
         if (!createTransaction) {
-            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
             console.log('unable to initiate transaction');
             return response.status(500).json({ data: '', status: false, message: 'unable to initiate transaction' });
         }
 
         //return transaction Ref
-
         return response.status(201).json({ data: transactionRefId, message: "success", status: true });
 
     }
@@ -326,4 +337,102 @@ export default class Purse {
         }
         return ip;
     }
+
+
+
+    static async exchangeRate(request,response) {
+        const { pair } = request.query;
+
+        const exchangePair = await MDBConnect.findOne('exchange_rate', { pair });
+        if (!exchangePair) {
+            return response.status(404).json({status:false,message:"pair not found",data:''})
+        }
+        return response.status(200).json({ data: exchangePair.value, message: "success", status: true });
+    }
+
+
+
+    static async deposit(request, response) {
+
+        const { ref,
+            type,
+            from,
+            to,
+            fromAccountName,
+            toAccountName,
+            uid,
+            amount,
+            currency,
+            status,
+            method,
+            title,
+            desc, timestamp,
+            metadata } = request.body;
+
+        const userData = request.userData;
+
+        const transaction = {
+            ref,
+            type,
+            from,
+            to,
+            fromAccountName,
+            toAccountName,
+            uid,
+            amount,
+            currency,
+            status,
+            method,
+            title,
+            desc, timestamp,
+            metadata
+        };
+
+        // validate transaction ref id
+        const validateTransactionRef = await MDBConnect.findOne('transaction', { ref });
+        if (!validateTransactionRef) {
+            const failed = await Purse.onDepositFailed(transaction);
+            return response.status(500).json({ data: '', status: false, message: 'invalid transaction ref' });
+        }
+        if (validateTransactionRef.status == "S") {
+            const failed = await Purse.onDepositFailed(transaction);
+            return response.status(500).json({ data: '', status: false, message: 'transaction has already been completed' });
+        }
+
+
+        // increase user account balance
+        const updateUserPurseAccount = await MDBConnect.updateOne('account', { number: userData.purseNumber, purseOwner: uid }, { '$inc': { balance: amount } });
+
+        if (!updateUserPurseAccount) {
+            const failed = await Purse.onDepositFailed(transaction);
+            console.log('unable to process transaction');
+            return response.status(500).json({ data: '', status: false, message: 'unable to process transaction' });
+        }
+
+        // update transaction 
+        transaction.status = "S";
+        const proceed = await MDBConnect.insertOne('transactions', transaction);
+        if (!proceed) {
+            const failed = await Purse.onDepositFailed(transaction);
+            console.log('unable to process transaction');
+            return response.status(500).json({ data: '', status: false, message: 'unable to finish transaction' });
+        }
+
+        // send user notifications
+        const notification = {
+            uid: uid,
+            title: "Credit Alert",
+            desc: `Your purse has been credited with ${amount} ref: ${ref}. Date: ${new Date().toLocaleDateString()}`,
+            type: 'success',
+            seen: false,
+            timestamp: Date.now()
+        };
+
+        const notify = await MDBConnect.insertOne('notification', notification);
+
+        return response.status(200).json(transaction);
+
+    }
+
+
 }

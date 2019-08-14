@@ -9,6 +9,8 @@ router.get('/purse', Validator.purse, Controller.purse);
 router.post('/transactions', Validator.transactions, Controller.transactions);
 router.post('/transfer', Validator.transfer, Controller.transfer);
 router.post('/initTransaction', Controller.initTransaction);
+router.post('/deposit', Validator.deposit, Controller.deposit);
+router.get('/exchangeRate', Validator.exchangeRate, Controller.exchangeRate);
 // router.post('/deposit', Validator.deposit, Controller.deposit);
 
 

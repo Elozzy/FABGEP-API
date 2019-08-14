@@ -175,6 +175,103 @@ function () {
       console.log(request.body);
       next();
     }
+  }, {
+    key: "exchangeRate",
+    value: function exchangeRate(request, response, next) {
+      var pair = request.query.pair;
+
+      if (Object.keys(request.query).length > 1) {
+        return response.status(400).json({
+          status: false,
+          message: 'less data required',
+          data: ''
+        });
+      }
+
+      if (isEmpty(pair)) {
+        return response.status(400).json({
+          status: false,
+          message: " pair is required",
+          data: ''
+        });
+      }
+
+      next();
+    }
+  }, {
+    key: "deposit",
+    value: function deposit(request, response, next) {
+      var _request$body2 = request.body,
+          ref = _request$body2.ref,
+          type = _request$body2.type,
+          from = _request$body2.from,
+          to = _request$body2.to,
+          fromAccountName = _request$body2.fromAccountName,
+          toAccountName = _request$body2.toAccountName,
+          uid = _request$body2.uid,
+          amount = _request$body2.amount,
+          currency = _request$body2.currency,
+          status = _request$body2.status,
+          method = _request$body2.method,
+          title = _request$body2.title,
+          desc = _request$body2.desc,
+          timestamp = _request$body2.timestamp;
+
+      if (Object.keys(request.body).length < 15) {
+        return response.status(400).json({
+          status: false,
+          message: 'more data required',
+          data: ''
+        });
+      }
+
+      if (isEmpty(amount) || isEmpty(ref) || isEmpty(type) || isEmpty(from) || isEmpty(to) || isEmpty(uid) || isEmpty(currency) || isEmpty(fromAccountName) || isEmpty(toAccountName) || isEmpty(status) || isEmpty(method) || isEmpty(title) || isEmpty(desc) || isEmpty(timestamp)) {
+        return response.status(400).json({
+          status: false,
+          message: "ref, type, from, to, fromAccountName, toAccountName, uid, amount,  currency, status, method, title, desc and timestamp is required",
+          data: ''
+        });
+      }
+
+      if (Number(amount) < 0) {
+        return response.status(400).json({
+          status: false,
+          message: 'amount is invalid',
+          data: ''
+        });
+      }
+
+      if (!isMoney.test(amount)) {
+        return response.status(400).json({
+          status: false,
+          message: 'amount mush be a double',
+          data: ''
+        });
+      }
+
+      if (!isAccountNumber.test(toAccount)) {
+        return response.status(400).json({
+          status: false,
+          message: 'invalid account number',
+          data: ''
+        });
+      }
+
+      var amt = Number(amount);
+
+      if (amt < 1) {
+        return response.status(400).json({
+          status: false,
+          message: 'invalid amount',
+          data: ''
+        });
+      } // parse amount to valid number
+
+
+      request.body.amount = Number(amount);
+      console.log(request.body);
+      next();
+    }
   }]);
   return PurseValidator;
 }();

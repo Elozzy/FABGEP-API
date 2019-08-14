@@ -346,16 +346,56 @@ function () {
       return onTransferFailed;
     }()
   }, {
+    key: "onDepositFailed",
+    value: function () {
+      var _onDepositFailed = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee6(transaction) {
+        var payload, e;
+        return _regenerator["default"].wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                payload = {
+                  uid: senderData.uid,
+                  title: "Transaction Failed",
+                  desc: "Your transfer of ".concat(amount, " to purse ").concat(toAccount, " has failed contact support for more information ref: ").concat(transactionRefId, " ").concat(new Date().toLocaleDateString()),
+                  type: 'danger',
+                  seen: false,
+                  timestamp: Date.now()
+                };
+                _context6.next = 3;
+                return _Mongodb["default"].insertOne('collection', payload);
+
+              case 3:
+                e = _context6.sent;
+                return _context6.abrupt("return", e);
+
+              case 5:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }));
+
+      function onDepositFailed(_x13) {
+        return _onDepositFailed.apply(this, arguments);
+      }
+
+      return onDepositFailed;
+    }()
+  }, {
     key: "transfer",
     value: function () {
       var _transfer = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee6(request, response) {
+      _regenerator["default"].mark(function _callee7(request, response) {
         var _request$body2, amount, toAccount, purpose, pin, senderData, senderPurse, receiverData, receiverPurse, transactionRefId, senderTransaction, receiverTransaction, createTransaction, failed, log, _failed, updateSenderPurseAccount, _failed2, updateReceiverPurseAccount, _failed3, updateTransaction, _failed4, senderNotification, receiverNotification, sendNotification;
 
-        return _regenerator["default"].wrap(function _callee6$(_context6) {
+        return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 _request$body2 = request.body, amount = _request$body2.amount, toAccount = _request$body2.toAccount, purpose = _request$body2.purpose, pin = _request$body2.pin;
                 console.log(request.body); // Fetch sender data
@@ -364,39 +404,39 @@ function () {
                 console.log(senderData); // validate sender pin
 
                 if (!(pin != senderData.pin)) {
-                  _context6.next = 8;
+                  _context7.next = 8;
                   break;
                 }
 
                 if (senderPurse) {
-                  _context6.next = 8;
+                  _context7.next = 8;
                   break;
                 }
 
                 console.log('invalid pin number');
-                return _context6.abrupt("return", response.status(400).json({
+                return _context7.abrupt("return", response.status(400).json({
                   data: '',
                   status: false,
                   message: 'invalid pin number'
                 }));
 
               case 8:
-                _context6.next = 10;
+                _context7.next = 10;
                 return _Mongodb["default"].findOne('account', {
                   purseOwner: senderData.uid,
                   number: senderData.purseNumber
                 });
 
               case 10:
-                senderPurse = _context6.sent;
+                senderPurse = _context7.sent;
 
                 if (senderPurse) {
-                  _context6.next = 14;
+                  _context7.next = 14;
                   break;
                 }
 
                 console.log('invalid account number');
-                return _context6.abrupt("return", response.status(404).json({
+                return _context7.abrupt("return", response.status(404).json({
                   data: '',
                   status: false,
                   message: 'invalid account number'
@@ -405,21 +445,21 @@ function () {
               case 14:
                 console.log(senderPurse); // Fetch receiver data
 
-                _context6.next = 17;
+                _context7.next = 17;
                 return _Mongodb["default"].findOne('users', {
                   purseNumber: toAccount
                 });
 
               case 17:
-                receiverData = _context6.sent;
+                receiverData = _context7.sent;
 
                 if (receiverData) {
-                  _context6.next = 21;
+                  _context7.next = 21;
                   break;
                 }
 
                 console.log('invalid receiver account number');
-                return _context6.abrupt("return", response.status(404).json({
+                return _context7.abrupt("return", response.status(404).json({
                   data: '',
                   status: false,
                   message: 'invalid receiver account number'
@@ -428,22 +468,22 @@ function () {
               case 21:
                 console.log(receiverData); // Fetch receiver purse account
 
-                _context6.next = 24;
+                _context7.next = 24;
                 return _Mongodb["default"].findOne('account', {
                   purseOwner: receiverData.uid,
                   number: toAccount
                 });
 
               case 24:
-                receiverPurse = _context6.sent;
+                receiverPurse = _context7.sent;
 
                 if (receiverPurse) {
-                  _context6.next = 28;
+                  _context7.next = 28;
                   break;
                 }
 
                 console.log('invalid account number');
-                return _context6.abrupt("return", response.status(404).json({
+                return _context7.abrupt("return", response.status(404).json({
                   data: '',
                   status: false,
                   message: 'invalid account number'
@@ -453,12 +493,12 @@ function () {
                 console.log(receiverPurse); // validate sender has sufficient funds to make transfer
 
                 if (!(amount > senderPurse.balance)) {
-                  _context6.next = 32;
+                  _context7.next = 32;
                   break;
                 }
 
                 console.log('insufficient funds');
-                return _context6.abrupt("return", response.status(402).json({
+                return _context7.abrupt("return", response.status(402).json({
                   data: '',
                   status: false,
                   message: 'insufficient funds'
@@ -479,6 +519,7 @@ function () {
                   amount: amount,
                   currency: 'USD',
                   status: 'P',
+                  method: 'Transfer',
                   title: 'Transfer',
                   desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
@@ -498,6 +539,7 @@ function () {
                   amount: amount,
                   currency: 'USD',
                   status: 'P',
+                  method: 'Transfer',
                   title: 'Transfer',
                   desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
@@ -506,31 +548,31 @@ function () {
                     useragent: request.useragent
                   }
                 };
-                _context6.next = 37;
+                _context7.next = 37;
                 return _Mongodb["default"].insertMany('transaction', [senderTransaction, receiverTransaction]);
 
               case 37:
-                createTransaction = _context6.sent;
+                createTransaction = _context7.sent;
 
                 if (createTransaction) {
-                  _context6.next = 44;
+                  _context7.next = 44;
                   break;
                 }
 
-                _context6.next = 41;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+                _context7.next = 41;
+                return Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
 
               case 41:
-                failed = _context6.sent;
+                failed = _context7.sent;
                 console.log('unable to initiate transaction');
-                return _context6.abrupt("return", response.status(500).json({
+                return _context7.abrupt("return", response.status(500).json({
                   data: '',
                   status: false,
                   message: 'unable to initiate transaction'
                 }));
 
               case 44:
-                _context6.next = 46;
+                _context7.next = 46;
                 return _Mongodb["default"].insertMany('purseSnapshot', [{
                   ref: transactionRefId,
                   senderPurse: senderPurse,
@@ -538,27 +580,27 @@ function () {
                 }]);
 
               case 46:
-                log = _context6.sent;
+                log = _context7.sent;
 
                 if (log) {
-                  _context6.next = 53;
+                  _context7.next = 53;
                   break;
                 }
 
-                _context6.next = 50;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+                _context7.next = 50;
+                return Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
 
               case 50:
-                _failed = _context6.sent;
+                _failed = _context7.sent;
                 console.log('unable to initiate transaction');
-                return _context6.abrupt("return", response.status(500).json({
+                return _context7.abrupt("return", response.status(500).json({
                   data: '',
                   status: false,
                   message: 'unable to initiate transaction'
                 }));
 
               case 53:
-                _context6.next = 55;
+                _context7.next = 55;
                 return _Mongodb["default"].updateOne('account', {
                   number: senderData.purseNumber,
                   purseOwner: senderData.uid
@@ -569,27 +611,27 @@ function () {
                 });
 
               case 55:
-                updateSenderPurseAccount = _context6.sent;
+                updateSenderPurseAccount = _context7.sent;
 
                 if (updateSenderPurseAccount) {
-                  _context6.next = 62;
+                  _context7.next = 62;
                   break;
                 }
 
-                _context6.next = 59;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+                _context7.next = 59;
+                return Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
 
               case 59:
-                _failed2 = _context6.sent;
+                _failed2 = _context7.sent;
                 console.log('unable to process transaction');
-                return _context6.abrupt("return", response.status(500).json({
+                return _context7.abrupt("return", response.status(500).json({
                   data: '',
                   status: false,
                   message: 'unable to process transaction'
                 }));
 
               case 62:
-                _context6.next = 64;
+                _context7.next = 64;
                 return _Mongodb["default"].updateOne('account', {
                   number: toAccount,
                   purseOwner: receiverData.uid
@@ -600,27 +642,27 @@ function () {
                 });
 
               case 64:
-                updateReceiverPurseAccount = _context6.sent;
+                updateReceiverPurseAccount = _context7.sent;
 
                 if (updateReceiverPurseAccount) {
-                  _context6.next = 71;
+                  _context7.next = 71;
                   break;
                 }
 
-                _context6.next = 68;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+                _context7.next = 68;
+                return Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
 
               case 68:
-                _failed3 = _context6.sent;
+                _failed3 = _context7.sent;
                 console.log('unable to process transaction');
-                return _context6.abrupt("return", response.status(500).json({
+                return _context7.abrupt("return", response.status(500).json({
                   data: '',
                   status: false,
                   message: 'unable to process transaction'
                 }));
 
               case 71:
-                _context6.next = 73;
+                _context7.next = 73;
                 return _Mongodb["default"].updateMany('transaction', {
                   ref: transactionRefId
                 }, {
@@ -630,20 +672,20 @@ function () {
                 });
 
               case 73:
-                updateTransaction = _context6.sent;
+                updateTransaction = _context7.sent;
 
                 if (updateTransaction) {
-                  _context6.next = 80;
+                  _context7.next = 80;
                   break;
                 }
 
-                _context6.next = 77;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+                _context7.next = 77;
+                return Purse.onTransferFailed(transactionRefId, senderData, amount, toAccount);
 
               case 77:
-                _failed4 = _context6.sent;
+                _failed4 = _context7.sent;
                 console.log('unable to update transaction');
-                return _context6.abrupt("return", response.status(500).json({
+                return _context7.abrupt("return", response.status(500).json({
                   data: '',
                   status: false,
                   message: 'unable to update transaction'
@@ -675,17 +717,17 @@ function () {
                   seen: false,
                   timestamp: Date.now()
                 };
-                _context6.next = 84;
+                _context7.next = 84;
                 return _Mongodb["default"].insertMany('notification', [].concat(senderNotification, [receiverNotification]));
 
               case 84:
-                sendNotification = _context6.sent;
+                sendNotification = _context7.sent;
 
                 if (!sendNotification) {
                   console.log('unable to send notification');
                 }
 
-                return _context6.abrupt("return", response.status(200).json({
+                return _context7.abrupt("return", response.status(200).json({
                   data: _objectSpread({}, senderTransaction, {
                     status: 'S'
                   }),
@@ -695,40 +737,17 @@ function () {
 
               case 87:
               case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }));
-
-      function transfer(_x13, _x14) {
-        return _transfer.apply(this, arguments);
-      }
-
-      return transfer;
-    }()
-  }, {
-    key: "deposit",
-    value: function () {
-      var _deposit = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee7(request, response) {
-        return _regenerator["default"].wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-              case "end":
                 return _context7.stop();
             }
           }
         }, _callee7);
       }));
 
-      function deposit(_x15, _x16) {
-        return _deposit.apply(this, arguments);
+      function transfer(_x14, _x15) {
+        return _transfer.apply(this, arguments);
       }
 
-      return deposit;
+      return transfer;
     }()
   }, {
     key: "initTransaction",
@@ -736,7 +755,7 @@ function () {
       var _initTransaction = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee8(request, response) {
-        var metadata, userData, transactionRefId, transaction, createTransaction, failed;
+        var metadata, userData, transactionRefId, transaction, createTransaction;
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
@@ -768,15 +787,10 @@ function () {
                 createTransaction = _context8.sent;
 
                 if (createTransaction) {
-                  _context8.next = 14;
+                  _context8.next = 11;
                   break;
                 }
 
-                _context8.next = 11;
-                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
-
-              case 11:
-                failed = _context8.sent;
                 console.log('unable to initiate transaction');
                 return _context8.abrupt("return", response.status(500).json({
                   data: '',
@@ -784,14 +798,14 @@ function () {
                   message: 'unable to initiate transaction'
                 }));
 
-              case 14:
+              case 11:
                 return _context8.abrupt("return", response.status(201).json({
                   data: transactionRefId,
                   message: "success",
                   status: true
                 }));
 
-              case 15:
+              case 12:
               case "end":
                 return _context8.stop();
             }
@@ -799,7 +813,7 @@ function () {
         }, _callee8);
       }));
 
-      function initTransaction(_x17, _x18) {
+      function initTransaction(_x16, _x17) {
         return _initTransaction.apply(this, arguments);
       }
 
@@ -818,6 +832,219 @@ function () {
 
       return ip;
     }
+  }, {
+    key: "exchangeRate",
+    value: function () {
+      var _exchangeRate = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee9(request, response) {
+        var pair, exchangePair;
+        return _regenerator["default"].wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                pair = request.query.pair;
+                _context9.next = 3;
+                return _Mongodb["default"].findOne('exchange_rate', {
+                  pair: pair
+                });
+
+              case 3:
+                exchangePair = _context9.sent;
+
+                if (exchangePair) {
+                  _context9.next = 6;
+                  break;
+                }
+
+                return _context9.abrupt("return", response.status(404).json({
+                  status: false,
+                  message: "pair not found",
+                  data: ''
+                }));
+
+              case 6:
+                return _context9.abrupt("return", response.status(200).json({
+                  data: exchangePair.value,
+                  message: "success",
+                  status: true
+                }));
+
+              case 7:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9);
+      }));
+
+      function exchangeRate(_x18, _x19) {
+        return _exchangeRate.apply(this, arguments);
+      }
+
+      return exchangeRate;
+    }()
+  }, {
+    key: "deposit",
+    value: function () {
+      var _deposit = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee10(request, response) {
+        var _request$body3, ref, type, from, to, fromAccountName, toAccountName, uid, amount, currency, status, method, title, desc, timestamp, metadata, userData, transaction, validateTransactionRef, failed, _failed5, updateUserPurseAccount, _failed6, proceed, _failed7, notification, notify;
+
+        return _regenerator["default"].wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                _request$body3 = request.body, ref = _request$body3.ref, type = _request$body3.type, from = _request$body3.from, to = _request$body3.to, fromAccountName = _request$body3.fromAccountName, toAccountName = _request$body3.toAccountName, uid = _request$body3.uid, amount = _request$body3.amount, currency = _request$body3.currency, status = _request$body3.status, method = _request$body3.method, title = _request$body3.title, desc = _request$body3.desc, timestamp = _request$body3.timestamp, metadata = _request$body3.metadata;
+                userData = request.userData;
+                transaction = {
+                  ref: ref,
+                  type: type,
+                  from: from,
+                  to: to,
+                  fromAccountName: fromAccountName,
+                  toAccountName: toAccountName,
+                  uid: uid,
+                  amount: amount,
+                  currency: currency,
+                  status: status,
+                  method: method,
+                  title: title,
+                  desc: desc,
+                  timestamp: timestamp,
+                  metadata: metadata
+                }; // validate transaction ref id
+
+                _context10.next = 5;
+                return _Mongodb["default"].findOne('transaction', {
+                  ref: ref
+                });
+
+              case 5:
+                validateTransactionRef = _context10.sent;
+
+                if (validateTransactionRef) {
+                  _context10.next = 11;
+                  break;
+                }
+
+                _context10.next = 9;
+                return Purse.onDepositFailed(transaction);
+
+              case 9:
+                failed = _context10.sent;
+                return _context10.abrupt("return", response.status(500).json({
+                  data: '',
+                  status: false,
+                  message: 'invalid transaction ref'
+                }));
+
+              case 11:
+                if (!(validateTransactionRef.status == "S")) {
+                  _context10.next = 16;
+                  break;
+                }
+
+                _context10.next = 14;
+                return Purse.onDepositFailed(transaction);
+
+              case 14:
+                _failed5 = _context10.sent;
+                return _context10.abrupt("return", response.status(500).json({
+                  data: '',
+                  status: false,
+                  message: 'transaction has already been completed'
+                }));
+
+              case 16:
+                _context10.next = 18;
+                return _Mongodb["default"].updateOne('account', {
+                  number: userData.purseNumber,
+                  purseOwner: uid
+                }, {
+                  '$inc': {
+                    balance: amount
+                  }
+                });
+
+              case 18:
+                updateUserPurseAccount = _context10.sent;
+
+                if (updateUserPurseAccount) {
+                  _context10.next = 25;
+                  break;
+                }
+
+                _context10.next = 22;
+                return Purse.onDepositFailed(transaction);
+
+              case 22:
+                _failed6 = _context10.sent;
+                console.log('unable to process transaction');
+                return _context10.abrupt("return", response.status(500).json({
+                  data: '',
+                  status: false,
+                  message: 'unable to process transaction'
+                }));
+
+              case 25:
+                // update transaction 
+                transaction.status = "S";
+                _context10.next = 28;
+                return _Mongodb["default"].insertOne('transactions', transaction);
+
+              case 28:
+                proceed = _context10.sent;
+
+                if (proceed) {
+                  _context10.next = 35;
+                  break;
+                }
+
+                _context10.next = 32;
+                return Purse.onDepositFailed(transaction);
+
+              case 32:
+                _failed7 = _context10.sent;
+                console.log('unable to process transaction');
+                return _context10.abrupt("return", response.status(500).json({
+                  data: '',
+                  status: false,
+                  message: 'unable to finish transaction'
+                }));
+
+              case 35:
+                // send user notifications
+                notification = {
+                  uid: uid,
+                  title: "Credit Alert",
+                  desc: "Your purse has been credited with ".concat(amount, " ref: ").concat(ref, ". Date: ").concat(new Date().toLocaleDateString()),
+                  type: 'success',
+                  seen: false,
+                  timestamp: Date.now()
+                };
+                _context10.next = 38;
+                return _Mongodb["default"].insertOne('notification', notification);
+
+              case 38:
+                notify = _context10.sent;
+                return _context10.abrupt("return", response.status(200).json(transaction));
+
+              case 40:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }));
+
+      function deposit(_x20, _x21) {
+        return _deposit.apply(this, arguments);
+      }
+
+      return deposit;
+    }()
   }]);
   return Purse;
 }();

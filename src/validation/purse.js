@@ -1,4 +1,4 @@
-import { isNumber } from "util";
+import { isNumber, isString } from "util";
 
 /**
  * @description isEmpty check for empty input field
@@ -111,4 +111,68 @@ export default class PurseValidator {
 
         next();
     }
+
+    static exchangeRate(request, response, next) {
+        const { pair } = request.query;
+
+        if (Object.keys(request.query).length > 1) {
+            return response.status(400).json({ status: false, message: 'less data required', data: '' });
+        }
+
+        if (isEmpty(pair)) {
+            return response.status(400).json({ status: false, message: ` pair is required`, data: '' });
+        }
+
+        next();
+
+    }
+
+    static deposit(request, response, next) {
+        const { ref,
+            type,
+            from,
+            to,
+            fromAccountName,
+            toAccountName,
+            uid,
+            amount,
+            currency,
+            status,
+            method,
+            title,
+            desc, timestamp,
+        } = request.body;
+
+        if (Object.keys(request.body).length < 15) {
+            return response.status(400).json({ status: false, message: 'more data required', data: '' });
+        }
+
+        if (isEmpty(amount) || isEmpty(ref) || isEmpty(type) || isEmpty(from) || isEmpty(to) || isEmpty(uid) || isEmpty(currency) || isEmpty(fromAccountName) || isEmpty(toAccountName) || isEmpty(status) || isEmpty(method) || isEmpty(title) || isEmpty(desc) || isEmpty(timestamp)) {
+            return response.status(400).json({ status: false, message: `ref, type, from, to, fromAccountName, toAccountName, uid, amount,  currency, status, method, title, desc and timestamp is required`, data: '' });
+        }
+
+        if (Number(amount) < 0) {
+            return response.status(400).json({ status: false, message: 'amount is invalid', data: '' });
+        }
+
+        if (!isMoney.test(amount)) {
+            return response.status(400).json({ status: false, message: 'amount mush be a double', data: '' });
+        }
+        if (!isAccountNumber.test(toAccount)) {
+            return response.status(400).json({ status: false, message: 'invalid account number', data: '' });
+        }
+
+        const amt = Number(amount);
+
+        if (amt < 1) {
+            return response.status(400).json({ status: false, message: 'invalid amount', data: '' });
+        }
+
+        // parse amount to valid number
+        request.body.amount = Number(amount);
+        console.log(request.body);
+
+        next();
+    }
+
 }
