@@ -299,9 +299,7 @@ function () {
                 _c5 = _context6.sent;
                 _context6.next = 6;
                 return _c5.db.updateOne(keyPair, _objectSpread({}, update, {
-                  $currentDate: {
-                    lastModified: true
-                  }
+                  lastModified: Date.now()
                 }));
 
               case 6:

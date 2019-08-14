@@ -17,7 +17,8 @@ var router = (0, _express.Router)();
 router.get('/user', _purse2["default"].userProfile, _purse["default"].userProfile);
 router.get('/purse', _purse2["default"].purse, _purse["default"].purse);
 router.post('/transactions', _purse2["default"].transactions, _purse["default"].transactions);
-router.post('/transfer', _purse2["default"].transfer, _purse["default"].transfer); // router.post('/deposit', Validator.deposit, Controller.deposit);
+router.post('/transfer', _purse2["default"].transfer, _purse["default"].transfer);
+router.get('/initTransaction', _purse["default"].initTransaction); // router.post('/deposit', Validator.deposit, Controller.deposit);
 
 var _default = router;
 exports["default"] = _default;

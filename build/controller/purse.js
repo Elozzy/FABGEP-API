@@ -738,6 +738,81 @@ function () {
 
       return deposit;
     }()
+  }, {
+    key: "initTransaction",
+    value: function () {
+      var _initTransaction = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee8(request, response) {
+        var metadata, userData, transactionRefId, transaction, createTransaction, failed;
+        return _regenerator["default"].wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                metadata = request.body.metadata;
+                userData = request.userData; // Create Transaction receipt
+
+                transactionRefId = "FMT-".concat(userData.purseNumber.toString().substr(6, 10), "-0000-").concat(Purse.generateNumber()); // create transaction
+
+                transaction = {
+                  ref: transactionRefId,
+                  status: 'P',
+                  metadata: {
+                    ip: ip,
+                    useragent: request.useragent
+                  },
+                  timestamp: Date.now()
+                };
+
+                if (metadata) {
+                  transaction.metadata = _objectSpread({}, transaction.metadata, {}, metadata);
+                } // Save transaction to database
+
+
+                _context8.next = 7;
+                return _Mongodb["default"].insertOne('transaction', transaction);
+
+              case 7:
+                createTransaction = _context8.sent;
+
+                if (createTransaction) {
+                  _context8.next = 14;
+                  break;
+                }
+
+                _context8.next = 11;
+                return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+
+              case 11:
+                failed = _context8.sent;
+                console.log('unable to initiate transaction');
+                return _context8.abrupt("return", response.status(500).json({
+                  data: '',
+                  status: false,
+                  message: 'unable to initiate transaction'
+                }));
+
+              case 14:
+                return _context8.abrupt("return", response.status(201).json({
+                  data: transactionRefId,
+                  message: "success",
+                  status: true
+                }));
+
+              case 15:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+
+      function initTransaction(_x17, _x18) {
+        return _initTransaction.apply(this, arguments);
+      }
+
+      return initTransaction;
+    }()
   }]);
   return Purse;
 }();
