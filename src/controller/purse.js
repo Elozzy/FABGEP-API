@@ -164,18 +164,6 @@ export default class Purse {
         // Create Transaction receipt
         const transactionRefId = `FMT-${senderData.purseNumber.toString().substr(6, 10)}-${toAccount.toString().substr(6, 10)}-${Purse.generateNumber()}`;
 
-        // Try and get request origin ip address
-        let ip = '';
-        try {
-            ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||
-                req.connection.remoteAddress ||
-                req.socket.remoteAddress ||
-                req.connection.socket.remoteAddress
-            console.log(`request ip address: ${ip}`);
-        } catch (error) {
-
-        }
-
         // create transaction
         const senderTransaction = {
             ref: transactionRefId,
@@ -190,7 +178,7 @@ export default class Purse {
             status: 'P',
             title: 'Transfer',
             desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
-            metadata: { ip: ip, useragent: request.useragent },
+            metadata: { ip: Purse.getIp(), useragent: request.useragent },
         };
         const receiverTransaction = {
             ref: transactionRefId,
@@ -205,7 +193,7 @@ export default class Purse {
             status: 'P',
             title: 'Transfer',
             desc: `Transferred $${amount} from your account to ${receiverData.firstName} ${receiverData.lastName} (${toAccount}). ${purpose}`, timestamp: Date.now(),
-            metadata: { ip: ip, useragent: request.useragent },
+            metadata: { ip: Purse.getIp(), useragent: request.useragent },
         };
 
         const createTransaction = await MDBConnect.insertMany('transaction', [senderTransaction, receiverTransaction]);
@@ -301,7 +289,7 @@ export default class Purse {
         const transaction = {
             ref: transactionRefId,
             status: 'P',
-            metadata: { ip: ip, useragent: request.useragent },
+            metadata: { ip: Purse.getIp(), useragent: request.useragent },
             timestamp: Date.now()
         };
         if (metadata) {
@@ -324,5 +312,18 @@ export default class Purse {
 
     }
 
+    static getIp() {
+        // Try and get request origin ip address
+        let ip = '';
+        try {
+            ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress
+            console.log(`request ip address: ${ip}`);
+        } catch (error) {
 
+        }
+        return ip;
+    }
 }

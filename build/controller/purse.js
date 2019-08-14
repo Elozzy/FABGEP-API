@@ -351,7 +351,7 @@ function () {
       var _transfer = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee6(request, response) {
-        var _request$body2, amount, toAccount, purpose, pin, senderData, senderPurse, receiverData, receiverPurse, transactionRefId, ip, senderTransaction, receiverTransaction, createTransaction, failed, log, _failed, updateSenderPurseAccount, _failed2, updateReceiverPurseAccount, _failed3, updateTransaction, _failed4, senderNotification, receiverNotification, sendNotification;
+        var _request$body2, amount, toAccount, purpose, pin, senderData, senderPurse, receiverData, receiverPurse, transactionRefId, senderTransaction, receiverTransaction, createTransaction, failed, log, _failed, updateSenderPurseAccount, _failed2, updateReceiverPurseAccount, _failed3, updateTransaction, _failed4, senderNotification, receiverNotification, sendNotification;
 
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
@@ -466,15 +466,7 @@ function () {
 
               case 32:
                 // Create Transaction receipt
-                transactionRefId = "FMT-".concat(senderData.purseNumber.toString().substr(6, 10), "-").concat(toAccount.toString().substr(6, 10), "-").concat(Purse.generateNumber()); // Try and get request origin ip address
-
-                ip = '';
-
-                try {
-                  ip = (req.headers['x-forwarded-for'] || '').split(',').pop() || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-                  console.log("request ip address: ".concat(ip));
-                } catch (error) {} // create transaction
-
+                transactionRefId = "FMT-".concat(senderData.purseNumber.toString().substr(6, 10), "-").concat(toAccount.toString().substr(6, 10), "-").concat(Purse.generateNumber()); // create transaction
 
                 senderTransaction = {
                   ref: transactionRefId,
@@ -491,7 +483,7 @@ function () {
                   desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
-                    ip: ip,
+                    ip: Purse.getIp(),
                     useragent: request.useragent
                   }
                 };
@@ -510,25 +502,25 @@ function () {
                   desc: "Transferred $".concat(amount, " from your account to ").concat(receiverData.firstName, " ").concat(receiverData.lastName, " (").concat(toAccount, "). ").concat(purpose),
                   timestamp: Date.now(),
                   metadata: {
-                    ip: ip,
+                    ip: Purse.getIp(),
                     useragent: request.useragent
                   }
                 };
-                _context6.next = 39;
+                _context6.next = 37;
                 return _Mongodb["default"].insertMany('transaction', [senderTransaction, receiverTransaction]);
 
-              case 39:
+              case 37:
                 createTransaction = _context6.sent;
 
                 if (createTransaction) {
-                  _context6.next = 46;
+                  _context6.next = 44;
                   break;
                 }
 
-                _context6.next = 43;
+                _context6.next = 41;
                 return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
 
-              case 43:
+              case 41:
                 failed = _context6.sent;
                 console.log('unable to initiate transaction');
                 return _context6.abrupt("return", response.status(500).json({
@@ -537,26 +529,26 @@ function () {
                   message: 'unable to initiate transaction'
                 }));
 
-              case 46:
-                _context6.next = 48;
+              case 44:
+                _context6.next = 46;
                 return _Mongodb["default"].insertMany('purseSnapshot', [{
                   ref: transactionRefId,
                   senderPurse: senderPurse,
                   receiverPurse: receiverPurse
                 }]);
 
-              case 48:
+              case 46:
                 log = _context6.sent;
 
                 if (log) {
-                  _context6.next = 55;
+                  _context6.next = 53;
                   break;
                 }
 
-                _context6.next = 52;
+                _context6.next = 50;
                 return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
 
-              case 52:
+              case 50:
                 _failed = _context6.sent;
                 console.log('unable to initiate transaction');
                 return _context6.abrupt("return", response.status(500).json({
@@ -565,8 +557,8 @@ function () {
                   message: 'unable to initiate transaction'
                 }));
 
-              case 55:
-                _context6.next = 57;
+              case 53:
+                _context6.next = 55;
                 return _Mongodb["default"].updateOne('account', {
                   number: senderData.purseNumber,
                   purseOwner: senderData.uid
@@ -576,18 +568,18 @@ function () {
                   }
                 });
 
-              case 57:
+              case 55:
                 updateSenderPurseAccount = _context6.sent;
 
                 if (updateSenderPurseAccount) {
-                  _context6.next = 64;
+                  _context6.next = 62;
                   break;
                 }
 
-                _context6.next = 61;
+                _context6.next = 59;
                 return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
 
-              case 61:
+              case 59:
                 _failed2 = _context6.sent;
                 console.log('unable to process transaction');
                 return _context6.abrupt("return", response.status(500).json({
@@ -596,8 +588,8 @@ function () {
                   message: 'unable to process transaction'
                 }));
 
-              case 64:
-                _context6.next = 66;
+              case 62:
+                _context6.next = 64;
                 return _Mongodb["default"].updateOne('account', {
                   number: toAccount,
                   purseOwner: receiverData.uid
@@ -607,18 +599,18 @@ function () {
                   }
                 });
 
-              case 66:
+              case 64:
                 updateReceiverPurseAccount = _context6.sent;
 
                 if (updateReceiverPurseAccount) {
-                  _context6.next = 73;
+                  _context6.next = 71;
                   break;
                 }
 
-                _context6.next = 70;
+                _context6.next = 68;
                 return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
 
-              case 70:
+              case 68:
                 _failed3 = _context6.sent;
                 console.log('unable to process transaction');
                 return _context6.abrupt("return", response.status(500).json({
@@ -627,8 +619,8 @@ function () {
                   message: 'unable to process transaction'
                 }));
 
-              case 73:
-                _context6.next = 75;
+              case 71:
+                _context6.next = 73;
                 return _Mongodb["default"].updateMany('transaction', {
                   ref: transactionRefId
                 }, {
@@ -637,18 +629,18 @@ function () {
                   }
                 });
 
-              case 75:
+              case 73:
                 updateTransaction = _context6.sent;
 
                 if (updateTransaction) {
-                  _context6.next = 82;
+                  _context6.next = 80;
                   break;
                 }
 
-                _context6.next = 79;
+                _context6.next = 77;
                 return onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
 
-              case 79:
+              case 77:
                 _failed4 = _context6.sent;
                 console.log('unable to update transaction');
                 return _context6.abrupt("return", response.status(500).json({
@@ -657,7 +649,7 @@ function () {
                   message: 'unable to update transaction'
                 }));
 
-              case 82:
+              case 80:
                 // create Sender Notification
                 senderNotification = [{
                   uid: senderData.uid,
@@ -683,10 +675,10 @@ function () {
                   seen: false,
                   timestamp: Date.now()
                 };
-                _context6.next = 86;
+                _context6.next = 84;
                 return _Mongodb["default"].insertMany('notification', [].concat(senderNotification, [receiverNotification]));
 
-              case 86:
+              case 84:
                 sendNotification = _context6.sent;
 
                 if (!sendNotification) {
@@ -701,7 +693,7 @@ function () {
                   message: "Transfer Successfully"
                 }));
 
-              case 89:
+              case 87:
               case "end":
                 return _context6.stop();
             }
@@ -758,7 +750,7 @@ function () {
                   ref: transactionRefId,
                   status: 'P',
                   metadata: {
-                    ip: ip,
+                    ip: Purse.getIp(),
                     useragent: request.useragent
                   },
                   timestamp: Date.now()
@@ -813,6 +805,19 @@ function () {
 
       return initTransaction;
     }()
+  }, {
+    key: "getIp",
+    value: function getIp() {
+      // Try and get request origin ip address
+      var ip = '';
+
+      try {
+        ip = (req.headers['x-forwarded-for'] || '').split(',').pop() || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+        console.log("request ip address: ".concat(ip));
+      } catch (error) {}
+
+      return ip;
+    }
   }]);
   return Purse;
 }();
