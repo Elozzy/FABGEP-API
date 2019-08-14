@@ -19,5 +19,6 @@ var router = (0, _express.Router)();
 router.post('/auth', _authentication["default"].tokenAuthentication);
 router.post('/signup', _Users["default"].userSignup, _users["default"].userSignup);
 router.post('/login', _Users["default"].userLogin, _users["default"].userLogin);
+router.post('/validatePin', _authentication["default"].isAuthenticated, _users["default"].validatePin);
 var _default = router;
 exports["default"] = _default;

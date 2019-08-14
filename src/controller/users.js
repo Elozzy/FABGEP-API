@@ -160,6 +160,32 @@ class Users {
         }
 
     }
+    static async validatePin(request, response) {
+        const { pin } = request.body;
+
+
+        if (!pin) {
+            return response.status(400).json({
+                status: false,
+                message: 'Invalid pin',
+                data: false
+            })
+        }
+
+        if (pin == request.userData.pin) {
+            return response.status(500).json({
+                status: true,
+                message: 'valid',
+                'data': true,
+            })
+        }
+        return response.status(400).json({
+            status: false,
+            message: 'Invalid pin',
+            data: false
+        })
+
+    }
 
 }
 

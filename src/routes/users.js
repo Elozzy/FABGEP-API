@@ -8,6 +8,7 @@ const router = Router();
 router.post('/auth', tokenValidation.tokenAuthentication);
 router.post('/signup', Validation.userSignup, Controller.userSignup);
 router.post('/login', Validation.userLogin, Controller.userLogin);
+router.post('/validatePin', tokenValidation.isAuthenticated, Controller.validatePin);
 
 
 

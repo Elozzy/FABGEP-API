@@ -320,6 +320,63 @@ function () {
 
       return userLogin;
     }()
+  }, {
+    key: "validatePin",
+    value: function () {
+      var _validatePin = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee4(request, response) {
+        var pin;
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                pin = request.body.pin;
+
+                if (pin) {
+                  _context4.next = 3;
+                  break;
+                }
+
+                return _context4.abrupt("return", response.status(400).json({
+                  status: false,
+                  message: 'Invalid pin',
+                  data: false
+                }));
+
+              case 3:
+                if (!(pin == request.userData.pin)) {
+                  _context4.next = 5;
+                  break;
+                }
+
+                return _context4.abrupt("return", response.status(500).json({
+                  status: true,
+                  message: 'valid',
+                  'data': true
+                }));
+
+              case 5:
+                return _context4.abrupt("return", response.status(400).json({
+                  status: false,
+                  message: 'Invalid pin',
+                  data: false
+                }));
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      function validatePin(_x5, _x6) {
+        return _validatePin.apply(this, arguments);
+      }
+
+      return validatePin;
+    }()
   }]);
   return Users;
 }();
