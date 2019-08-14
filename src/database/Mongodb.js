@@ -76,7 +76,7 @@ class MDBConnect {
     static async updateOne(collection, keyPair, update) {
         try {
             const c = await MDBConnect.connect(collection);
-            const result = await c.db.updateOne(keyPair, { ...update, $currentDate: { lastModified: true } });
+            const result = await c.db.updateOne(keyPair, { ...update, lastModified: Date.now() });
             c.client.close();
             return result;
         } catch (error) {

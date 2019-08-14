@@ -290,6 +290,39 @@ export default class Purse {
 
     }
 
+    static async initTransaction(request, response) {
+
+        const { metadata } = request.body;
+        const userData = request.userData;
+        // Create Transaction receipt
+        const transactionRefId = `FMT-${userData.purseNumber.toString().substr(6, 10)}-0000-${Purse.generateNumber()}`;
+
+        // create transaction
+        const transaction = {
+            ref: transactionRefId,
+            status: 'P',
+            metadata: { ip: ip, useragent: request.useragent },
+            timestamp: Date.now()
+        };
+        if (metadata) {
+            transaction.metadata = { ...transaction.metadata, ...metadata }
+        }
+
+        // Save transaction to database
+        const createTransaction = await MDBConnect.insertOne('transaction', transaction);
+
+        // error should occurred
+        if (!createTransaction) {
+            const failed = await onTransferFailed(transactionRefId, senderData.uid, amount, toAccount);
+            console.log('unable to initiate transaction');
+            return response.status(500).json({ data: '', status: false, message: 'unable to initiate transaction' });
+        }
+
+        //return transaction Ref
+
+        return response.status(201).json({ data: transactionRefId, message: "success", status: true });
+
+    }
 
 
 }
