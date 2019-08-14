@@ -173,7 +173,7 @@ class Users {
         }
 
         if (pin == request.userData.pin) {
-            return response.status(500).json({
+            return response.status(200).json({
                 status: true,
                 message: 'valid',
                 'data': true,

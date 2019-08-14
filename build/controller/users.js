@@ -350,7 +350,7 @@ function () {
                   break;
                 }
 
-                return _context4.abrupt("return", response.status(500).json({
+                return _context4.abrupt("return", response.status(200).json({
                   status: true,
                   message: 'valid',
                   'data': true
