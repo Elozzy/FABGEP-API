@@ -992,7 +992,11 @@ function () {
                 // update transaction 
                 transaction.status = "S";
                 _context10.next = 28;
-                return _Mongodb["default"].insertOne('transactions', transaction);
+                return _Mongodb["default"].updateOne('transaction', {
+                  ref: ref
+                }, {
+                  $set: transaction
+                });
 
               case 28:
                 proceed = _context10.sent;
@@ -1019,7 +1023,7 @@ function () {
                 notification = {
                   uid: uid,
                   title: "Credit Alert",
-                  desc: "Your purse has been credited with ".concat(amount, " ref: ").concat(ref, ". Date: ").concat(new Date().toLocaleDateString()),
+                  desc: "Your purse has been credited with ".concat(amount, " ").concat(currency, " ref: ").concat(ref, ". Date: ").concat(new Date().toLocaleDateString()),
                   type: 'success',
                   seen: false,
                   timestamp: Date.now()

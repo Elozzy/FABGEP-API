@@ -249,14 +249,6 @@ function () {
         });
       }
 
-      if (!isAccountNumber.test(toAccount)) {
-        return response.status(400).json({
-          status: false,
-          message: 'invalid account number',
-          data: ''
-        });
-      }
-
       var amt = Number(amount);
 
       if (amt < 1) {

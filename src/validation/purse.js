@@ -158,9 +158,6 @@ export default class PurseValidator {
         if (!isMoney.test(amount)) {
             return response.status(400).json({ status: false, message: 'amount mush be a double', data: '' });
         }
-        if (!isAccountNumber.test(toAccount)) {
-            return response.status(400).json({ status: false, message: 'invalid account number', data: '' });
-        }
 
         const amt = Number(amount);
 

@@ -340,12 +340,12 @@ export default class Purse {
 
 
 
-    static async exchangeRate(request,response) {
+    static async exchangeRate(request, response) {
         const { pair } = request.query;
 
         const exchangePair = await MDBConnect.findOne('exchange_rate', { pair });
         if (!exchangePair) {
-            return response.status(404).json({status:false,message:"pair not found",data:''})
+            return response.status(404).json({ status: false, message: "pair not found", data: '' })
         }
         return response.status(200).json({ data: exchangePair.value, message: "success", status: true });
     }
@@ -411,7 +411,7 @@ export default class Purse {
 
         // update transaction 
         transaction.status = "S";
-        const proceed = await MDBConnect.insertOne('transactions', transaction);
+        const proceed = await MDBConnect.updateOne('transaction', { ref }, { $set: transaction });
         if (!proceed) {
             const failed = await Purse.onDepositFailed(transaction);
             console.log('unable to process transaction');
@@ -422,7 +422,7 @@ export default class Purse {
         const notification = {
             uid: uid,
             title: "Credit Alert",
-            desc: `Your purse has been credited with ${amount} ref: ${ref}. Date: ${new Date().toLocaleDateString()}`,
+            desc: `Your purse has been credited with ${amount} ${currency} ref: ${ref}. Date: ${new Date().toLocaleDateString()}`,
             type: 'success',
             seen: false,
             timestamp: Date.now()
