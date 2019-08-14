@@ -120,10 +120,10 @@ function () {
           pin = _request$body.pin,
           purpose = _request$body.purpose;
 
-      if (Object.keys(request.body).length > 4) {
+      if (Object.keys(request.body).length < 4) {
         return response.status(400).json({
           status: false,
-          message: 'less data required',
+          message: 'more data required',
           data: ''
         });
       }
@@ -131,7 +131,7 @@ function () {
       if (isEmpty(amount) || isEmpty(toAccount) || isEmpty(pin) || isEmpty(purpose)) {
         return response.status(400).json({
           status: false,
-          message: 'amount,pin, purpose  and to account is required',
+          message: 'amount,pin, purpose and to account is required',
           data: ''
         });
       }
@@ -156,6 +156,16 @@ function () {
         return response.status(400).json({
           status: false,
           message: 'invalid account number',
+          data: ''
+        });
+      }
+
+      var amt = Number(amount);
+
+      if (amt < 1) {
+        return response.status(400).json({
+          status: false,
+          message: 'invalid amount',
           data: ''
         });
       } // parse amount to valid number

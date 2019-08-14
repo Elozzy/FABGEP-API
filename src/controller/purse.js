@@ -270,7 +270,7 @@ export default class Purse {
             console.log('unable to send notification');
         }
 
-        return response.status(200).json({ data: { ...senderTransaction, status: 'A' }, status: true, message: "Transfer Successfully" });
+        return response.status(200).json({ data: { ...senderTransaction, status: 'S' }, status: true, message: "Transfer Successfully" });
 
 
     }

@@ -687,7 +687,7 @@ function () {
 
                 return _context6.abrupt("return", response.status(200).json({
                   data: _objectSpread({}, senderTransaction, {
-                    status: 'A'
+                    status: 'S'
                   }),
                   status: true,
                   message: "Transfer Successfully"
