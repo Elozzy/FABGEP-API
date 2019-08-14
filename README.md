@@ -23,10 +23,102 @@ The Kwara Food and Agricultural Business Growth Enhancement Program - KW-FABGEP 
 
 ### Standard API response format
 
-```
+```json
 {
 "status": [boolean] - Only true if the details provided could be processed and no error occured while processing,
 "message": [string] - Explains why status is false... Entirely informational. Please only log this but do not use for your checks,
 "data": [object] - contains actionable result of processing if present
+}
+```
+
+## EndPoints
+
+### POST: /api/v1/transactions
+
+returns an array of user transaction's from database
+
+#### Mongo Query Details
+
+collection: _transaction_
+
+Query:
+
+```json
+{
+  "uid": ""[String]
+}
+```
+
+##### request prams (optional)
+
+```json
+{
+  "limit": (5)[int] // numbers of items to retrieve. if [null] of [0] return all document
+}
+```
+
+##### response: 200
+
+```json
+{
+  "status": true[boolean],
+  "message": "success"[string],
+  "data": [][Array]
+}
+```
+
+### POST: /api/v1/investments
+
+returns an array of user investments from database
+
+#### Mongo Query Details
+
+collection: _investment_
+
+Query:
+
+```json
+{
+  "uid": ""[String]
+}
+```
+
+##### request prams: NONE
+
+##### response: 200
+
+```json
+{
+  "status": true[boolean],
+  "message": "success"[string],
+  "data": [][Array]
+}
+```
+
+### GET: /api/v1/packages
+
+returns an array of available packages from database
+
+#### Mongo Query Details
+
+collection: _packages_
+
+Query:
+
+```json
+{
+  "status": true
+}
+```
+
+##### request prams: NONE
+
+##### response: 200
+
+```json
+{
+  "status": true[boolean],
+  "message": "success"[string],
+  "data": [][Array]
 }
 ```
